@@ -1,5 +1,5 @@
 
-public interface RentalHistoryInterface {
+public interface IRentalHistory {
 	boolean addCheckoutCard(CheckoutCard cc);
 	boolean removeCheckoutCard();
 }

@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 
 
-public class RentalHistory implements RentalHistoryInterface {
+public class RentalHistory implements IRentalHistory {
 
 	ArrayList<CheckoutCard> rentalHistory = new ArrayList<>();
 	

@@ -1,5 +1,5 @@
 
-public interface LibraryControllerInterface {
+public interface ILibraryController {
 	boolean addBook(String T);
 	boolean deleteBook(long mid);
 	boolean editBook(long mid, int field, String newValue);

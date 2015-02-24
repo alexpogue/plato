@@ -1,5 +1,5 @@
 
-public class Customer implements CustomerInterface {
+public class Customer implements ICustomer {
 	
 	String name;
 	long customerId = -1;

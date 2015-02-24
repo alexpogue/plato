@@ -1,5 +1,5 @@
 
-public interface DatabaseSupportInterface {
+public interface IDatabaseSupport {
 	boolean putMedia(Media m); 
 	Media getMedia(long mid);
 	boolean putCustomer(Customer c);
