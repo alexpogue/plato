@@ -1,10 +1,14 @@
 
-public class Book extends Media {
+public class Book extends Media implements IBook {
 	private String title;
 	private String author;
 	private String publisher;
 	private String isbn;
 	
+	public Book() {
+		super(-1, Type.Book);
+	}
+
 	public Book(int id, String title, String author, String publisher, String isbn) {
 		super(id, Type.Book);
 		this.title = title;
