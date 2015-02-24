@@ -55,10 +55,4 @@ public class Book extends Media implements IBook {
 	public void setIsbn(String isbn) {
 		this.isbn = isbn;
 	}
-
-	@Override
-	public boolean editBook(int field, String newValue) {
-		// TODO Auto-generated method stub
-		return false;
-	}
 }
