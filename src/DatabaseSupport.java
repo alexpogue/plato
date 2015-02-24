@@ -80,6 +80,7 @@ public class DatabaseSupport /*implements Visitor*/ {
     	}
     }
     
+    //Should this method be static?
     public boolean putMedia(Media m) {
     	boolean success = false;
 		Media.Type type = m.getType();
@@ -91,6 +92,7 @@ public class DatabaseSupport /*implements Visitor*/ {
 		return success;
 	}
     
+    //Should this method be static?
     private boolean putBook(Book b) {
     	boolean status = false;
     	String statement = "INSERT INTO plato.books " +

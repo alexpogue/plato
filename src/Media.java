@@ -1,19 +1,19 @@
 
 public abstract class Media {
-	private int id;
+	private long id;
 	private CheckoutCard card;
 	private Type type;
 	
-	public Media(int id, Type type) {
+	public Media(long id, Type type) {
 		this.id = id;
 		this.type = type;
 	}
 	
-	public int getId() {
+	public long getId() {
 		return id;
 	}
 	
-	public void setId(int id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 	
