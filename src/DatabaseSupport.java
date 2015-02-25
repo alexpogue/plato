@@ -19,7 +19,7 @@ public class DatabaseSupport implements IDatabaseSupport {
 		this.user = user;
 		this.password = password;
 	}
-
+	
 	public static void main(String[] args) {
 		String url = "jdbc:postgresql://localhost/postgres";
 		String user = "user123";

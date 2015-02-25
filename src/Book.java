@@ -4,7 +4,7 @@ public class Book extends Media implements IBook {
 	private String author;
 	private String publisher;
 	private String isbn;
-	
+		
 	public Book() {
 		super(-1, Type.Book);
 	}
@@ -15,6 +15,13 @@ public class Book extends Media implements IBook {
 		this.author = author;
 		this.publisher = publisher;
 		this.isbn = isbn;
+	}
+	
+	public Book(long id, String title)
+	{
+		//TODO generate long id in library
+		super(id, Type.Book);
+		this.title = title;
 	}
 
 	public String getTitle() {
