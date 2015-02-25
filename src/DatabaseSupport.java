@@ -1,7 +1,9 @@
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -26,41 +28,73 @@ public class DatabaseSupport implements IDatabaseSupport {
 		DatabaseSupport ds = new DatabaseSupport(url, user, password);
 
 		Scanner scan = new Scanner(System.in);
-		System.out.println("Enter book information to put it into the database:");
-		System.out.print("Enter title: ");
-		String title = scan.nextLine();
-		System.out.print("Enter author: ");
-		String author = scan.nextLine();
-		System.out.print("Enter publisher: ");
-		String publisher = scan.nextLine();
-		System.out.print("Enter isbn: ");
-		String isbn = scan.nextLine();
+
+		System.out.print("Enter 'p' to put a new book, or 'g' to get a book: ");
+		String cmd = scan.nextLine();
+		if(cmd.charAt(0) == 'p') {
+			System.out.println("Putting a new book into the database:");
+			System.out.print("Enter title: ");
+			String title = scan.nextLine();
+			System.out.print("Enter author: ");
+			String author = scan.nextLine();
+			System.out.print("Enter publisher: ");
+			String publisher = scan.nextLine();
+			System.out.print("Enter isbn: ");
+			String isbn = scan.nextLine();
+
+			Media m = new Book(-1, title, author, publisher, isbn);
+
+			boolean success = ds.putMedia(m);
+
+			if(success) {
+				System.out.println("Success!");
+			}
+			else {
+				System.out.println("Fail :(");
+			}
+		}
+		else if(cmd.charAt(0) == 'g') {
+			System.out.println("Getting a book from the database:");
+			System.out.print("Enter book id: ");
+			long id = scan.nextLong();
+			scan.nextLine();
+			Media m = ds.getMedia(id);
+			if(m != null && m.getType() == Media.Type.Book) {
+				Book b = (Book) m;
+				System.out.println("Got book:");
+				System.out.println("  title = " + b.getTitle());
+				System.out.println("  author = " + b.getAuthor());
+				System.out.println("  publisher = " + b.getPublisher());
+				System.out.println("  isbn = " + b.getIsbn());
+				System.out.println("Success!");
+			}
+			else {
+				System.out.println("Fail :(");
+			}
+		}
 		scan.close();
-
-		Media m = new Book(-1, title, author, publisher, isbn);
-
-		boolean success = ds.putMedia(m);
-
-		if(success) {
-			System.out.println("Success!");
-		}
-		else {
-			System.out.println("Fail :(");
-		}
 	}
 
-	private void insertRecord(String sql, List<String> preparedStrings) throws SQLException {
-		Connection con = DriverManager.getConnection(url, user, password);
+	private boolean insertRecord(String sql, List<String> preparedStrings) {
+		Connection con = null;
+		try {
+			con = DriverManager.getConnection(url, user, password);
 
-		if(!preparedStrings.isEmpty()) {
-			PreparedStatement preparedStatement = con.prepareStatement(sql);
-			for(int i = 0; i < preparedStrings.size(); i++) {
-				preparedStatement.setString(i+1, preparedStrings.get(i));
+			try {
+				if(!preparedStrings.isEmpty()) {
+					PreparedStatement preparedStatement = con.prepareStatement(sql);
+					for(int i = 0; i < preparedStrings.size(); i++) {
+						preparedStatement.setString(i+1, preparedStrings.get(i));
+					}
+					preparedStatement.executeUpdate();
+				}
+				return true;
+			} finally {
+				con.close();
 			}
-			preparedStatement.executeUpdate();
+		} catch (SQLException e) {
+			return false;
 		}
-
-		con.close();
 	}
 
 	public boolean putMedia(Media m) {
@@ -85,7 +119,6 @@ public class DatabaseSupport implements IDatabaseSupport {
 		//       synchronization. For example, what if the database inserts into
 		//       media, and then the server immediately shuts down. That would
 		//       leave an orphaned id without a corresponding book.
-		boolean success = true;
 		String sql = "INSERT INTO plato.books " +
 				"(title, author, publisher, isbn) VALUES " +
 				"(?, ?, ?, ?)";
@@ -95,23 +128,50 @@ public class DatabaseSupport implements IDatabaseSupport {
 		preparedStrings.add(b.getPublisher());
 		preparedStrings.add(b.getIsbn());
 
-		try {
-			insertRecord(sql, preparedStrings);
-		} catch (SQLException e) {
-			System.err.println(e.getMessage());
-			success = false;
-		}
-		return success;
+		return insertRecord(sql, preparedStrings);
 	}
 
 	private Book getBook(long bid) {
-		// TODO fill in
-		return null;
+		Connection con = null;
+		try {
+			con = DriverManager.getConnection(url, user, password);
+			ResultSet rs = null;
+
+			String sql = "SELECT " +
+					"plato.books.title AS title," +
+					"plato.books.author AS author," +
+					"plato.books.publisher AS publisher," +
+					"plato.books.isbn AS isbn " +
+					"FROM plato.books WHERE id='"+ bid +"'";
+
+			String title, author, publisher, isbn;
+
+			try {
+				Statement stmt = con.createStatement();
+				rs = stmt.executeQuery(sql);
+				rs.next();
+
+				title = rs.getString("title");
+				author = rs.getString("author");
+				publisher = rs.getString("publisher");
+				isbn = rs.getString("isbn");
+
+			} finally {
+				con.close();
+				if(rs != null) {
+					rs.close();
+				}
+			}
+
+			return new Book(bid, title, author, publisher, isbn);
+		} catch (SQLException e) {
+			return null;
+		}
 	}
 
 	@Override
 	public Media getMedia(long mid) {
-		// TODO: assuming media can only be a book
+		// for now we assume media can only be a book
 		return getBook(mid);
 	}
 

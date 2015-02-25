@@ -9,7 +9,7 @@ public class Book extends Media implements IBook {
 		super(-1, Type.Book);
 	}
 
-	public Book(int id, String title, String author, String publisher, String isbn) {
+	public Book(long id, String title, String author, String publisher, String isbn) {
 		super(id, Type.Book);
 		this.title = title;
 		this.author = author;
