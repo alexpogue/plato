@@ -9,14 +9,23 @@ public class Book extends Media implements IBook {
 		super(-1, Type.Book);
 	}
 
+	public Book(String title, String author, String publisher, String isbn) {
+		super(-1, Type.Book);
+		init(title, author, publisher, isbn);
+	}
+
 	public Book(long id, String title, String author, String publisher, String isbn) {
 		super(id, Type.Book);
+		init(title, author, publisher, isbn);
+	}
+
+	private void init(String title, String author, String publisher, String isbn) {
 		this.title = title;
 		this.author = author;
 		this.publisher = publisher;
 		this.isbn = isbn;
 	}
-	
+
 	public Book(long id, String title)
 	{
 		//TODO generate long id in library

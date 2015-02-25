@@ -42,7 +42,7 @@ public class DatabaseSupport implements IDatabaseSupport {
 			System.out.print("Enter isbn: ");
 			String isbn = scan.nextLine();
 
-			Media m = new Book(-1, title, author, publisher, isbn);
+			Media m = new Book(title, author, publisher, isbn);
 
 			boolean success = ds.putMedia(m);
 
