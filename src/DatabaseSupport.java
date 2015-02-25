@@ -98,6 +98,15 @@ public class DatabaseSupport implements IDatabaseSupport {
 	}
 
 	public boolean putMedia(Media m) {
+		if(m.getId() < 0) {
+			return putNewMedia(m);
+		}
+		else {
+			return updateOldMedia(m);
+		}
+	}
+
+	private boolean putNewMedia(Media m) {
 		boolean success;
 		Media.Type type = m.getType();
 		switch(type) {
@@ -109,6 +118,11 @@ public class DatabaseSupport implements IDatabaseSupport {
 			break;
 		}
 		return success;
+	}
+
+	private boolean updateOldMedia(Media m) {
+		// TODO: implement
+		return false;
 	}
 
 	private boolean putBook(Book b) {
