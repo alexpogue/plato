@@ -1,5 +1,5 @@
 
-public class Customer implements ICustomer {
+public class Customer implements ICustomer{
 	
 	String name;
 	long customerId = -1;
@@ -27,6 +27,21 @@ public class Customer implements ICustomer {
 	public boolean removeCheckoutCard() {
 		// TODO pretty sure this doesn't make any dang sense as we don't know which checkoutCard to remove
 		return customerHistory.removeCheckoutCard();
+	}
+	
+	public String getName()
+	{
+		return name;
+	}
+	
+	public void setName(String name)
+	{
+		this.name = name;
+	}
+	
+	public RentalHistory getRentalHistory()
+	{
+		return customerHistory;
 	}
 	
 }

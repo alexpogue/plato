@@ -191,8 +191,16 @@ public class DatabaseSupport implements IDatabaseSupport {
 
 	@Override
 	public boolean putCustomer(Customer c) {
-		// TODO Auto-generated method stub
-		return false;
+		// TODO Customer table needs to be added to database
+		String sql = "INSERT INTO plato.customers " +
+				"(name, rentalhistory) VALUES " +
+				"(?, ?)";
+		List<String> preparedStrings = new ArrayList<String>();
+		preparedStrings.add(c.getName());
+		//TODO We need to figure out how PostGres stores arrays
+		// preparedStrings.add(c.getRentalHistory());
+
+		return insertRecord(sql, preparedStrings);
 	}
 
 	@Override
