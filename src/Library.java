@@ -19,7 +19,9 @@ public class Library implements ILibrary{
 	@Override
 	public boolean deleteBook(long mid) {
 		// TODO Make the call to delete the tuple with the media ID specified
-		return false;
+		databaseSupport.getMedia(mid);
+		//TODO remove the media
+		return true;
 	}
 
 	// TODO This "responsibility" will likely change into many different methods
