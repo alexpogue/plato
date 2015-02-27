@@ -1,21 +1,27 @@
 
 public class Customer implements ICustomer{
 	
-	String name;
-	long customerId = -1;
-	RentalHistory customerHistory;
+	private String name;
+	private int balance = 0;
+	
+	// This silly thing complains when it might not get used.
+	// TODO remove after Class is done, to denote the warnings we still have.
+	@SuppressWarnings("unused")
+	private long customerId = -1;
+	
+	private RentalHistory customerHistory;
 	
 	public Customer(String name)
 	{
 		this.name = name;
-		// TODO Randomly generate our customerId and assign it
 		customerHistory = new RentalHistory();
 	}
 
-	// TODO We need to nail down what fields we want, and if we want individual use cases/methods for the fields
-	@Override
-	public boolean editCustomer(int field, String newValue) {
-		return false;
+	public Customer(long cid, String name, RentalHistory rentalHistory, int balanceOwed) {
+		this.customerId = cid;
+		this.name = name;
+		this.customerHistory = rentalHistory;
+		this.balance = balanceOwed;
 	}
 
 	@Override
@@ -42,6 +48,16 @@ public class Customer implements ICustomer{
 	public RentalHistory getRentalHistory()
 	{
 		return customerHistory;
+	}
+	
+	public int getBalanceOwed()
+	{
+		return balance;
+	}
+	
+	public void setBalance(int balance)
+	{
+		this.balance = balance;
 	}
 	
 }

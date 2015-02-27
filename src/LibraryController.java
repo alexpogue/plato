@@ -17,11 +17,6 @@ public class LibraryController implements ILibraryController {
 	}
 
 	@Override
-	public boolean editBook(long mid, int field, String newValue) {
-		return library.editBook(mid, field, newValue);
-	}
-
-	@Override
 	public boolean addCustomer(long cid) {
 		return library.addCustomer(cid);
 	}
@@ -29,11 +24,6 @@ public class LibraryController implements ILibraryController {
 	@Override
 	public boolean removeCustomer(long cid) {
 		return library.removeCustomer(cid);
-	}
-
-	@Override
-	public boolean editCustomer(long cid, int field, String newValue) {
-		return library.editCustomer(cid, field, newValue);
 	}
 
 	@Override

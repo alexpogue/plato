@@ -193,19 +193,54 @@ public class DatabaseSupport implements IDatabaseSupport {
 	public boolean putCustomer(Customer c) {
 		// TODO Customer table needs to be added to database
 		String sql = "INSERT INTO plato.customers " +
-				"(name, rentalhistory) VALUES " +
-				"(?, ?)";
+				"(name, rentalhistory, balance) VALUES " +
+				"(?, ?, ?)";
 		List<String> preparedStrings = new ArrayList<String>();
 		preparedStrings.add(c.getName());
 		//TODO We need to figure out how PostGres stores arrays
 		// preparedStrings.add(c.getRentalHistory());
+		preparedStrings.add(((Integer)c.getBalanceOwed()).toString());
 
 		return insertRecord(sql, preparedStrings);
 	}
 
 	@Override
 	public Customer getCustomer(long cid) {
-		// TODO Auto-generated method stub
-		return null;
+		Connection con = null;
+		try {
+			con = DriverManager.getConnection(url, user, password);
+			ResultSet rs = null;
+
+			String sql = "SELECT " +
+					"plato.customers.name AS name," +
+					"plato.customers.rentalhistory AS rentalhistory," +
+					"plato.customers.balance AS balance " +
+					"FROM plato.customers WHERE id='"+ cid +"'";
+
+			String name;
+			RentalHistory rentalHistory;
+			int balanceOwed;
+
+			try {
+				Statement stmt = con.createStatement();
+				rs = stmt.executeQuery(sql);
+				rs.next();
+
+				name = rs.getString("name");
+				rentalHistory = (RentalHistory) rs.getArray("rentalhistory");
+				balanceOwed = rs.getInt("balance");
+
+			} finally {
+				con.close();
+				if(rs != null) {
+					rs.close();
+				}
+			}
+
+			return new Customer(cid, name, rentalHistory, balanceOwed);
+			
+		} catch (SQLException e) {
+			return null;
+		}
 	}
 }
