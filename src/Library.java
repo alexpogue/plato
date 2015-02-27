@@ -3,6 +3,7 @@ import java.util.Random;
 public class Library implements ILibrary{
 
 	private Random idGenerator = new Random();
+	private IDatabaseSupport databaseSupport;
 	
 	public String editTitle(String s){
 		return "";
@@ -10,17 +11,17 @@ public class Library implements ILibrary{
 
 	@Override
 	public boolean addBook(String T) {
-		// TODO How do we determine the validity of a book title?
-		boolean valid = true;
-		
-		if(!valid)
-			return false;
-		
-		else
-		{
-			Book b = new Book(generateId(), T);
+		IBook B= new Book();
+		B.setTitle(T);
+		// TODO determine IMedia or Media
+		Media M = (Media)B;
+		databaseSupport.putMedia(M);
+		if(databaseSupport.putMedia(M)){
+			return true;
 		}
-		// TODO return status of DatabaseSupport.putMedia or .putBook
+		else{
+			return false;
+		}
 	}
 
 	@Override

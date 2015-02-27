@@ -1,5 +1,5 @@
 
-public interface IBook {
+public interface IBook extends IMedia {
 	public String getTitle();
 	public void setTitle(String title);
 	public String getAuthor();
