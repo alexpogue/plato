@@ -11,17 +11,9 @@ public class Library implements ILibrary{
 
 	@Override
 	public boolean addBook(String T) {
-		IBook B= new Book();
+		Book B= new Book();
 		B.setTitle(T);
-		// TODO determine IMedia or Media
-		Media M = (Media)B;
-		databaseSupport.putMedia(M);
-		if(databaseSupport.putMedia(M)){
-			return true;
-		}
-		else{
-			return false;
-		}
+		return databaseSupport.putMedia(B);
 	}
 
 	@Override
