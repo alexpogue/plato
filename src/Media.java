@@ -1,7 +1,6 @@
 
-public abstract class Media {
+public abstract class Media implements IMedia {
 	private long id;
-	private CheckoutCard card;
 	private Type type;
 
 	public Media(long id, Type type) {

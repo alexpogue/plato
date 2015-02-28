@@ -324,4 +324,28 @@ public class DatabaseSupport implements IDatabaseSupport {
 			return null;
 		}
 	}
+
+	@Override
+	public boolean putCheckoutCard(CheckoutCard cc) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public CheckoutCard getRecentCheckoutCardForMedia(long mid) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public LatePolicy getLatePolicy() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean putLatePolicy(LatePolicy lp) {
+		// TODO Auto-generated method stub
+		return false;
+	}
 }

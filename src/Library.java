@@ -1,3 +1,5 @@
+import java.util.Date;
+
 
 public class Library implements ILibrary{
 
@@ -36,20 +38,39 @@ public class Library implements ILibrary{
 
 	@Override
 	public boolean checkOutMedia(long cid, long mid) {
-		// TODO Auto-generated method stub
-		return false;
+		Media m = databaseSupport.getMedia(mid);
+		Customer c = databaseSupport.getCustomer(cid);
+		if(m == null || c == null) {
+			// TODO: communicate these specific errors to the outside world
+			return false;
+		}
+		CheckoutCard cc = new CheckoutCard(cid, mid);
+		return databaseSupport.putCheckoutCard(cc);
 	}
 
 	@Override
 	public boolean checkInMedia(long mid) {
-		// TODO Auto-generated method stub
-		return false;
+		if(databaseSupport.getMedia(mid) == null) {
+			// media with specified id does not exist
+			return false;
+		}
+		CheckoutCard cc = databaseSupport.getRecentCheckoutCardForMedia(mid);
+		if(cc == null) {
+			// no checkout card exists for this media
+			return false;
+		}
+		if(cc.getCheckInDate() != null) {
+			// media has already been checked in
+			return false;
+		}
+		cc.setCheckInDate(new Date());
+		return databaseSupport.putCheckoutCard(cc);
 	}
 
 	@Override
 	public boolean setLatePolicy(int daysUntilLate, float costPerDay) {
-		// TODO Auto-generated method stub
-		return false;
+		LatePolicy lp = new LatePolicy(daysUntilLate, costPerDay);
+		return databaseSupport.putLatePolicy(lp);
 	}
 	
 }

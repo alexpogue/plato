@@ -1,5 +1,5 @@
 
 public interface IMedia {
-	CheckoutCard checkOut(long cid);
-	int checkIn();	
+	public long getId();
+	public void setId(long id);
 }

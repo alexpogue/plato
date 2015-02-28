@@ -2,30 +2,75 @@ import java.util.Date;
 
 
 public class CheckoutCard {
-	private int customerId;
+	private long cardId;
+	private long customerId;
+	private long mediaId;
 	private Date checkedOut;
+	private Date checkedIn;
 	
-	public CheckoutCard(int customerId) {
-		this.customerId = customerId;
+	public CheckoutCard(long customerId, long mediaId) {
+		init(-1, customerId, mediaId, new Date(), null);
 	}
 	
-	public CheckoutCard(int customerId, Date checkedOut)
+	public CheckoutCard(long customerId, long mediaId, Date checkedOut)
 	{
-		this.customerId = customerId;
-		this.checkedOut = checkedOut;
+		init(-1, customerId, mediaId, checkedOut, null);
+	}
+
+	public CheckoutCard(long customerId, long mediaId, Date checkedOut, Date checkedIn)
+	{
+		init(-1, customerId, mediaId, checkedOut, checkedIn);
+	}
+
+	public CheckoutCard(long cardId, long customerId, long mediaId, Date checkedOut, Date checkedIn) {
+		init(cardId, customerId, mediaId, checkedOut, checkedIn);
+	}
+
+	private void init(long id, long cid, long mid, Date out, Date in) {
+		cardId = id;
+		customerId = cid;
+		mediaId = mid;
+		checkedOut = out;
+		checkedIn = in;
+	}
+
+	public long getCardId() {
+		return cardId;
+	}
+
+	public void setCardId(long id) {
+		cardId = id;
 	}
 	
-	public int getCustomerId() {
+	public long getCustomerId() {
 		return customerId;
 	}
+
+	public void setCustomerId(long customerId) {
+		this.customerId = customerId;
+	}
 	
-	public Date getCheckoutDate()
-	{
+	public long getMediaId() {
+		return mediaId;
+	}
+
+	public void setMediaId(long mediaId) {
+		this.mediaId = mediaId;
+	}
+
+	public Date getCheckOutDate() {
 		return checkedOut;
 	}
 	
-	public void setCheckoutDate(Date checkoutDate)
-	{
-		this.checkedOut = checkoutDate;
+	public void setCheckOutDate(Date checkOutDate) {
+		checkedOut = checkOutDate;
+	}
+
+	public Date getCheckInDate() {
+		return checkedIn;
+	}
+
+	public void setCheckInDate(Date checkInDate) {
+		checkedIn = checkInDate;
 	}
 }
