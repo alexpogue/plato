@@ -165,7 +165,7 @@ public class DatabaseSupport implements IDatabaseSupport {
 		//       synchronization. For example, what if the database inserts into
 		//       media, and then the server immediately shuts down. That would
 		//       leave an orphaned id without a corresponding book.
-		String sql = "INSERT INTO books " +
+		String sql = "INSERT INTO Books " +
 				"(title, author, publisher, isbn) VALUES (?, ?, ?, ?)";
 		List<String> preparedStrings = getBookPreparedStrings(b);
 
@@ -188,7 +188,7 @@ public class DatabaseSupport implements IDatabaseSupport {
 
 	private boolean updateBook(Book b) {
 		// TODO: use a prepared int to insert the book id into the sql query (safer than string manipulation)
-		String sql = "UPDATE books SET " +
+		String sql = "UPDATE Books SET " +
 				"title = ?, author = ?, publisher = ?, isbn = ? WHERE id = " + b.getId(); 
 		List<String> preparedStrings = getBookPreparedStrings(b);
 
@@ -211,11 +211,11 @@ public class DatabaseSupport implements IDatabaseSupport {
 			ResultSet rs = null;
 
 			String sql = "SELECT " +
-					"books.title AS title," +
-					"books.author AS author," +
-					"books.publisher AS publisher," +
-					"books.isbn AS isbn " +
-					"FROM books WHERE id='"+ bid +"'";
+					"Books.title AS title," +
+					"Books.author AS author," +
+					"Books.publisher AS publisher," +
+					"Books.isbn AS isbn " +
+					"FROM Books WHERE id='"+ bid +"'";
 
 			String title, author, publisher, isbn;
 
