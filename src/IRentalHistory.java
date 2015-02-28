@@ -1,5 +1,5 @@
 
 public interface IRentalHistory {
 	boolean addCheckoutCard(CheckoutCard cc);
-	boolean removeCheckoutCard();
+	boolean removeCheckoutCard(CheckoutCard cc);
 }

@@ -8,7 +8,6 @@ public class Customer implements ICustomer{
 	// TODO remove after Class is done, to denote the warnings we still have.
 	@SuppressWarnings("unused")
 	private long customerId = -1;
-	
 	private RentalHistory customerHistory;
 	
 	public Customer(String name)
@@ -25,14 +24,15 @@ public class Customer implements ICustomer{
 	}
 
 	@Override
-	public boolean addCheckoutCard(CheckoutCard cc) {
+	public boolean addCheckoutCard(CheckoutCard cc) 
+	{
 		return customerHistory.addCheckoutCard(cc);
 	}
 
 	@Override
-	public boolean removeCheckoutCard() {
-		// TODO pretty sure this doesn't make any dang sense as we don't know which checkoutCard to remove
-		return customerHistory.removeCheckoutCard();
+	public boolean removeCheckoutCard(CheckoutCard cc) 
+	{
+		return customerHistory.removeCheckoutCard(cc);
 	}
 	
 	public String getName()

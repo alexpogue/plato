@@ -2,7 +2,8 @@ import java.util.Date;
 
 
 public class CheckoutCard {
-	private int customerId;
+	private long ccId;
+	private long customerId;
 	private Date checkedOut;
 	
 	public CheckoutCard(int customerId) {
@@ -15,8 +16,17 @@ public class CheckoutCard {
 		this.checkedOut = checkedOut;
 	}
 	
-	public int getCustomerId() {
+	public long getId()
+	{
+		return ccId;
+	}
+	
+	public long getCustomerId() {
 		return customerId;
+	}
+	
+	public void setCustomerId(long ccId) {
+		this.ccId = ccId;
 	}
 	
 	public Date getCheckoutDate()
