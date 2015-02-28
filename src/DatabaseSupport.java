@@ -146,6 +146,8 @@ public class DatabaseSupport implements IDatabaseSupport {
 	private boolean putNewMedia(Media m) {
 		boolean success;
 		Media.Type type = m.getType();
+		long id = getNewMediaId();
+		m.setId(id);
 		switch(type) {
 		case Book:
 			success = putBook((Book) m);
@@ -157,6 +159,25 @@ public class DatabaseSupport implements IDatabaseSupport {
 		return success;
 	}
 
+	private long getNewMediaId() {
+		String sql = "INSERT INTO Media DEFAULT VALUES";
+		Connection con = null;
+		try {
+			con = DriverManager.getConnection(url, user, password);
+			PreparedStatement statement = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+			statement.executeUpdate();
+			ResultSet generatedKeys = statement.getGeneratedKeys();
+			if(generatedKeys.next()) {
+				return generatedKeys.getLong(1);
+			}
+			else {
+				return -1;
+			}
+		} catch (SQLException e) {
+			return -1;
+		}
+	}
+
 	private boolean putBook(Book b) {
 		// TODO: Warning! Autoincrement field on books does not guarantee unique
 		//       ids on all media, only unique to the books. Must add a "Media"
@@ -165,8 +186,9 @@ public class DatabaseSupport implements IDatabaseSupport {
 		//       synchronization. For example, what if the database inserts into
 		//       media, and then the server immediately shuts down. That would
 		//       leave an orphaned id without a corresponding book.
+		// TODO: parameterize id rather than doing string manipulation (safer)
 		String sql = "INSERT INTO Books " +
-				"(title, author, publisher, isbn) VALUES (?, ?, ?, ?)";
+				"(id, title, author, publisher, isbn) VALUES (" + b.getId() + ", ?, ?, ?, ?)";
 		List<String> preparedStrings = getBookPreparedStrings(b);
 
 		return executeSql(sql, preparedStrings);
