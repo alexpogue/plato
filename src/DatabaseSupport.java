@@ -260,7 +260,7 @@ public class DatabaseSupport implements IDatabaseSupport {
 		// preparedStrings.add(c.getRentalHistory());
 		preparedStrings.add(((Integer)c.getBalanceOwed()).toString());
 
-		return insertRecord(sql, preparedStrings);
+		return executeSql(sql, preparedStrings);
 	}
 
 	@Override
