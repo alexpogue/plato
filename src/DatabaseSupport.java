@@ -1,3 +1,8 @@
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -21,17 +26,26 @@ public class DatabaseSupport implements IDatabaseSupport {
 	}
 	
 	public static void main(String[] args) {
-		String url = "jdbc:postgresql://localhost/postgres";
-		String user = "user123";
-		String password = "postgres";
+		List<String> dbcreds = new ArrayList<String>();
+		Path path = Paths.get("dbcreds.txt");
+		try {
+			dbcreds = Files.readAllLines(path, StandardCharsets.UTF_8);
+		} catch (IOException e) {
+			System.out.println(e.getMessage());
+			return;
+		}
+		String url = dbcreds.get(0);
+		String user = dbcreds.get(1);
+		String password = dbcreds.get(2);
 
 		DatabaseSupport ds = new DatabaseSupport(url, user, password);
 
 		Scanner scan = new Scanner(System.in);
 
-		System.out.print("Enter 'p' to put a new book, or 'g' to get a book: ");
+		System.out.print("Enter 'p' (put book), 'g' (get book), or 'u' (update book): ");
 		String cmd = scan.nextLine();
-		if(cmd.charAt(0) == 'p') {
+		char cmdc = cmd.charAt(0);
+		if(cmdc == 'p') {
 			System.out.println("Putting a new book into the database:");
 			System.out.print("Enter title: ");
 			String title = scan.nextLine();
@@ -53,7 +67,32 @@ public class DatabaseSupport implements IDatabaseSupport {
 				System.out.println("Fail :(");
 			}
 		}
-		else if(cmd.charAt(0) == 'g') {
+		else if(cmdc == 'u') {
+			System.out.println("Updating a book in the database:");
+			System.out.print("Enter id of book to update: ");
+			int id = scan.nextInt();
+			scan.nextLine();
+			System.out.print("Enter title: ");
+			String title = scan.nextLine();
+			System.out.print("Enter author: ");
+			String author = scan.nextLine();
+			System.out.print("Enter publisher: ");
+			String publisher = scan.nextLine();
+			System.out.print("Enter isbn: ");
+			String isbn = scan.nextLine();
+
+			Media m = new Book(id, title, author, publisher, isbn);
+
+			boolean success = ds.putMedia(m);
+
+			if(success) {
+				System.out.println("Success!");
+			}
+			else {
+				System.out.println("Fail :(");
+			}
+		}
+		else if(cmdc == 'g') {
 			System.out.println("Getting a book from the database:");
 			System.out.print("Enter book id: ");
 			long id = scan.nextLong();
@@ -75,19 +114,17 @@ public class DatabaseSupport implements IDatabaseSupport {
 		scan.close();
 	}
 
-	private boolean insertRecord(String sql, List<String> preparedStrings) {
+	private boolean executeSql(String sql, List<String> preparedStrings) {
 		Connection con = null;
 		try {
 			con = DriverManager.getConnection(url, user, password);
 
 			try {
-				if(!preparedStrings.isEmpty()) {
-					PreparedStatement preparedStatement = con.prepareStatement(sql);
-					for(int i = 0; i < preparedStrings.size(); i++) {
-						preparedStatement.setString(i+1, preparedStrings.get(i));
-					}
-					preparedStatement.executeUpdate();
+				PreparedStatement statement = con.prepareStatement(sql);
+				for(int i = 0; i < preparedStrings.size(); i++) {
+					statement.setString(i+1, preparedStrings.get(i));
 				}
+				statement.executeUpdate();
 				return true;
 			} finally {
 				con.close();
@@ -120,11 +157,6 @@ public class DatabaseSupport implements IDatabaseSupport {
 		return success;
 	}
 
-	private boolean updateOldMedia(Media m) {
-		// TODO: implement
-		return false;
-	}
-
 	private boolean putBook(Book b) {
 		// TODO: Warning! Autoincrement field on books does not guarantee unique
 		//       ids on all media, only unique to the books. Must add a "Media"
@@ -133,16 +165,43 @@ public class DatabaseSupport implements IDatabaseSupport {
 		//       synchronization. For example, what if the database inserts into
 		//       media, and then the server immediately shuts down. That would
 		//       leave an orphaned id without a corresponding book.
-		String sql = "INSERT INTO plato.books " +
-				"(title, author, publisher, isbn) VALUES " +
-				"(?, ?, ?, ?)";
+		String sql = "INSERT INTO books " +
+				"(title, author, publisher, isbn) VALUES (?, ?, ?, ?)";
+		List<String> preparedStrings = getBookPreparedStrings(b);
+
+		return executeSql(sql, preparedStrings);
+	}
+
+	private boolean updateOldMedia(Media m) {
+		boolean success;
+		Media.Type type = m.getType();
+		switch(type) {
+		case Book:
+			success = updateBook((Book) m);
+			break;
+		default:
+			success = false;
+			break;
+		}
+		return success;
+	}
+
+	private boolean updateBook(Book b) {
+		// TODO: use a prepared int to insert the book id into the sql query (safer than string manipulation)
+		String sql = "UPDATE books SET " +
+				"title = ?, author = ?, publisher = ?, isbn = ? WHERE id = " + b.getId(); 
+		List<String> preparedStrings = getBookPreparedStrings(b);
+
+		return executeSql(sql, preparedStrings);
+	}
+
+	private List<String> getBookPreparedStrings(Book b) {
 		List<String> preparedStrings = new ArrayList<String>();
 		preparedStrings.add(b.getTitle());
 		preparedStrings.add(b.getAuthor());
 		preparedStrings.add(b.getPublisher());
 		preparedStrings.add(b.getIsbn());
-
-		return insertRecord(sql, preparedStrings);
+		return preparedStrings;
 	}
 
 	private Book getBook(long bid) {
@@ -152,11 +211,11 @@ public class DatabaseSupport implements IDatabaseSupport {
 			ResultSet rs = null;
 
 			String sql = "SELECT " +
-					"plato.books.title AS title," +
-					"plato.books.author AS author," +
-					"plato.books.publisher AS publisher," +
-					"plato.books.isbn AS isbn " +
-					"FROM plato.books WHERE id='"+ bid +"'";
+					"books.title AS title," +
+					"books.author AS author," +
+					"books.publisher AS publisher," +
+					"books.isbn AS isbn " +
+					"FROM books WHERE id='"+ bid +"'";
 
 			String title, author, publisher, isbn;
 
