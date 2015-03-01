@@ -34,11 +34,11 @@ public class CheckoutCard {
 		checkedIn = in;
 	}
 
-	public long getCardId() {
+	public long getId() {
 		return cardId;
 	}
 
-	public void setCardId(long id) {
+	public void setId(long id) {
 		cardId = id;
 	}
 	
