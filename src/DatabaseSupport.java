@@ -134,7 +134,7 @@ public class DatabaseSupport implements IDatabaseSupport {
 		}
 	}
 
-	private String typeToString(Media.Type type)
+	private String typeToTableName(Media.Type type)
 	{
 		switch(type)
 		{
@@ -282,7 +282,7 @@ public class DatabaseSupport implements IDatabaseSupport {
 			
 			Media.Type type = m.getType();
 			
-			String sql1 = "DELETE FROM " + typeToString(type) +
+			String sql1 = "DELETE FROM " + typeToTableName(type) +
 					" WHERE id='" + m.getId() + "'";
 			
 			String sql2 = "DELETE FROM Media WHERE id='" + m.getId() + "'";
