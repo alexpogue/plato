@@ -134,6 +134,17 @@ public class DatabaseSupport implements IDatabaseSupport {
 		}
 	}
 
+	private String typeToString(Media.Type type)
+	{
+		switch(type)
+		{
+			case Book:
+				return "Books";
+		}
+		
+		return null;
+	}
+	
 	public boolean putMedia(Media m) {
 		if(m.getId() < 0) {
 			return putNewMedia(m);
@@ -177,7 +188,7 @@ public class DatabaseSupport implements IDatabaseSupport {
 			return -1;
 		}
 	}
-
+	
 	private boolean putBook(Book b) {
 		// TODO: parameterize id rather than doing string manipulation (safer)
 		String sql = "INSERT INTO Books " +
@@ -264,6 +275,36 @@ public class DatabaseSupport implements IDatabaseSupport {
 	}
 
 	@Override
+	public boolean removeMedia(Media m) {
+		Connection con = null;
+		try {
+			con = DriverManager.getConnection(url, user, password);
+			
+			Media.Type type = m.getType();
+			
+			String sql1 = "DELETE FROM " + typeToString(type) +
+					" WHERE id='" + m.getId() + "'";
+			
+			String sql2 = "DELETE FROM Media WHERE id='" + m.getId() + "'";
+			
+			try {
+				
+				Statement stmt = con.createStatement();
+				stmt.executeQuery(sql1);
+				stmt.executeQuery(sql2);
+				
+			} finally {
+				con.close();
+			}
+			
+			return true;
+		} catch (SQLException e) {
+			return false;
+		}
+		
+	}
+	
+	@Override
 	public boolean putCustomer(Customer c) {
 		// TODO Customer table needs to be added to database
 		String sql = "INSERT INTO Customers " +
@@ -321,6 +362,29 @@ public class DatabaseSupport implements IDatabaseSupport {
 	}
 
 	@Override
+	public boolean removeCustomer(long cid) {
+		Connection con = null;
+		try {
+			con = DriverManager.getConnection(url, user, password);
+			
+			String sql = "DELETE FROM Customers WHERE id='" + cid + "'";
+			
+			try {
+				
+				Statement stmt = con.createStatement();
+				stmt.executeQuery(sql);
+				
+			} finally {
+				con.close();
+			}
+			
+			return true;
+		} catch (SQLException e){
+			return false;
+		}
+	}
+	
+	@Override
 	public boolean putCheckoutCard(CheckoutCard cc) {
 		// TODO Auto-generated method stub
 		return false;
@@ -343,4 +407,5 @@ public class DatabaseSupport implements IDatabaseSupport {
 		// TODO Auto-generated method stub
 		return false;
 	}
+	
 }

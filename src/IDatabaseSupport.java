@@ -2,7 +2,7 @@
 public interface IDatabaseSupport {
 	boolean putMedia(Media m); 
 	Media getMedia(long mid);
-	boolean removeMedia(long mid);
+	boolean removeMedia(Media m);
 	boolean putCustomer(Customer c);
 	Customer getCustomer(long cid);
 	boolean removeCustomer(long cid);
