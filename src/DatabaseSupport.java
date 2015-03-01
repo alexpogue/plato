@@ -273,16 +273,21 @@ public class DatabaseSupport implements IDatabaseSupport {
 	@Override
 	public boolean putCustomer(Customer c) {
 		// TODO Customer table needs to be added to database
-		String sql = "INSERT INTO plato.customers " +
-				"(name, rentalhistory, balance) VALUES " +
-				"(?, ?, ?)";
+		String sql = "INSERT INTO Customers " +
+				"(name, balance) VALUES (" +
+				 + c.getId() + ", ?, " + c.getBalanceOwed() + " )";
+		
 		List<String> preparedStrings = new ArrayList<String>();
 		preparedStrings.add(c.getName());
-		//TODO We need to figure out how PostGres stores arrays
-		// preparedStrings.add(c.getRentalHistory());
-		preparedStrings.add(((Integer)c.getBalanceOwed()).toString());
 
 		return executeSql(sql, preparedStrings);
+	}
+	
+	public List<String> getCustomerPreparedStrings(Customer c)
+	{
+		List<String> preparedStrings = new ArrayList<String>();
+		preparedStrings.add(c.getName());
+		return preparedStrings;
 	}
 
 	@Override
@@ -294,13 +299,11 @@ public class DatabaseSupport implements IDatabaseSupport {
 
 			String sql = "SELECT " +
 					"plato.customers.name AS name," +
-					"plato.customers.rentalhistory AS rentalhistory," +
 					"plato.customers.balance AS balance " +
 					"FROM plato.customers WHERE id='"+ cid +"'";
 
 			String name;
-			RentalHistory rentalHistory;
-			int balanceOwed;
+			float balanceOwed;
 
 			try {
 				Statement stmt = con.createStatement();
@@ -308,8 +311,7 @@ public class DatabaseSupport implements IDatabaseSupport {
 				rs.next();
 
 				name = rs.getString("name");
-				rentalHistory = (RentalHistory) rs.getArray("rentalhistory");
-				balanceOwed = rs.getInt("balance");
+				balanceOwed = rs.getFloat("balance");
 
 			} finally {
 				con.close();
@@ -318,7 +320,7 @@ public class DatabaseSupport implements IDatabaseSupport {
 				}
 			}
 
-			return new Customer(cid, name, rentalHistory, balanceOwed);
+			return new Customer(cid, name, balanceOwed);
 			
 		} catch (SQLException e) {
 			return null;
