@@ -22,20 +22,30 @@ public class Library implements ILibrary{
 	public boolean deleteBook(long mid) {
 		// TODO Make the call to delete the tuple with the media ID specified
 		databaseSupport.getMedia(mid);
-		//TODO remove the media
+		// TODO remove the media
 		return true;
 	}
 
 	@Override
-	public boolean addCustomer(long cid) {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean addCustomer(String name) {	
+		Customer customer = new Customer(name);
+		return databaseSupport.putCustomer(customer);
 	}
 
 	@Override
 	public boolean removeCustomer(long cid) {
-		// TODO Auto-generated method stub
-		return false;
+		// TODO Make the call to delete the tuple with the Customer ID specified
+		databaseSupport.getCustomer(cid);
+		// TODO remove the customer
+		return true;
+	}
+	
+	public boolean editCustomerName(long cid, String newName)
+	{
+		Customer customer = databaseSupport.getCustomer(cid);
+		customer.setName(newName);
+		
+		return databaseSupport.putCustomer(customer);
 	}
 
 	@Override

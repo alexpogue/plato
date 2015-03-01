@@ -5,7 +5,7 @@ public class RentalHistory implements IRentalHistory {
 
 	// TODO 
 	// Maybe we need to give Checkout cards IDs and just create an ArrayList of all the IDs
-	ArrayList<CheckoutCard> rentalHistory = new ArrayList<>();
+	ArrayList<Long> rentalHistory = new ArrayList<>();
 	
 	@Override
 	public boolean addCheckoutCard(CheckoutCard cc) {
@@ -18,16 +18,22 @@ public class RentalHistory implements IRentalHistory {
 		}
 		else
 		{
-			rentalHistory.add(cc);
+			long id = cc.getId();
+			rentalHistory.add(id);
 			return true;
 		}
 	}
 
 	@Override
-	public boolean removeCheckoutCard() {
-		// TODO
-		// Hmmm... I think we might need an argument here, otherwise we won't know which CheckoutCard to remove
-		return false;
+	public boolean removeCheckoutCard(CheckoutCard cc) 
+	{
+		long id = cc.getId();
+		if(rentalHistory.contains(id))
+		{
+			return rentalHistory.remove(id);
+		}
+		else
+			return false;
 	}
 
 }

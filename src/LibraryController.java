@@ -17,8 +17,8 @@ public class LibraryController implements ILibraryController {
 	}
 
 	@Override
-	public boolean addCustomer(long cid) {
-		return library.addCustomer(cid);
+	public boolean addCustomer(String name) {
+		return library.addCustomer(name);
 	}
 
 	@Override
