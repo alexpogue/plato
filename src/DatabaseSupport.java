@@ -282,16 +282,22 @@ public class DatabaseSupport implements IDatabaseSupport {
 			
 			Media.Type type = m.getType();
 			
-			String sql1 = "DELETE FROM " + typeToTableName(type) +
-					" WHERE id='" + m.getId() + "'";
+			String sql1 = "DELETE FROM ?" +
+					" WHERE id=?";
 			
-			String sql2 = "DELETE FROM Media WHERE id='" + m.getId() + "'";
+			String sql2 = "DELETE FROM Media WHERE id=?";
 			
 			try {
 				
-				Statement stmt = con.createStatement();
-				stmt.executeQuery(sql1);
-				stmt.executeQuery(sql2);
+				PreparedStatement pStmt = con.prepareStatement(sql1);
+				String s = typeToTableName(type);
+				pStmt.setString(1, s);
+				pStmt.setLong(2, m.getId());
+				pStmt.executeQuery();
+				
+				PreparedStatement pStmt2 = con.prepareStatement(sql2);
+				pStmt2.setLong(1, m.getId());
+				pStmt2.executeQuery(sql2);
 				
 			} finally {
 				con.close();
@@ -332,15 +338,16 @@ public class DatabaseSupport implements IDatabaseSupport {
 			ResultSet rs = null;
 
 			String sql = "SELECT " +
-					"plato.customers.name AS name," +
-					"plato.customers.balance AS balance " +
-					"FROM plato.customers WHERE id='"+ cid +"'";
+					"Customers.name AS name," +
+					"Customers.balance AS balance " +
+					"FROM Customers WHERE id=?";
 
 			String name;
 			float balanceOwed;
 
 			try {
-				Statement stmt = con.createStatement();
+				PreparedStatement stmt = con.prepareStatement(sql);
+				stmt.setLong(1, cid);
 				rs = stmt.executeQuery(sql);
 				rs.next();
 
@@ -367,11 +374,12 @@ public class DatabaseSupport implements IDatabaseSupport {
 		try {
 			con = DriverManager.getConnection(url, user, password);
 			
-			String sql = "DELETE FROM Customers WHERE id='" + cid + "'";
+			String sql = "DELETE FROM Customers WHERE id=?";
 			
 			try {
 				
-				Statement stmt = con.createStatement();
+				PreparedStatement stmt = con.prepareStatement(sql);
+				stmt.setLong(1, cid);
 				stmt.executeQuery(sql);
 				
 			} finally {
@@ -408,4 +416,103 @@ public class DatabaseSupport implements IDatabaseSupport {
 		return false;
 	}
 	
+	protected void printBookTable() {
+		
+		Connection con = null;
+		try {
+			con = DriverManager.getConnection(url, user, password);
+			ResultSet rs = null;
+
+			String sql = "SELECT " +
+					"Books.id AS id," +
+					"Books.title AS title," +
+					"Books.author AS author," +
+					"Books.publisher AS publisher," +
+					"Books.isbn AS isbn " +
+					"FROM Books";
+			
+			long id;
+			String title, author, publisher, isbn;
+
+			try {
+				Statement stmt = con.createStatement();
+				rs = stmt.executeQuery(sql);
+				
+				while(rs.next())
+				{
+					id = rs.getLong("id");
+					title = rs.getString("title");
+					author = rs.getString("author");
+					publisher = rs.getString("publisher");
+					isbn = rs.getString("isbn");
+					
+					System.out.println("Book Id: " + id);
+					System.out.println("Title: " + title);
+					System.out.println("Author: " + author);
+					System.out.println("Publisher: " + publisher);
+					System.out.println("ISBN: " + isbn + "\n");
+				}
+
+			} finally {
+				con.close();
+				if(rs != null) {
+					rs.close();
+				}
+			}
+			
+			return;
+			
+		} catch (SQLException e) {
+			return;
+		}
+			
+	}
+	
+	protected void printCustomerTable() {
+		Connection con = null;
+		try {
+			con = DriverManager.getConnection(url, user, password);
+			ResultSet rs = null;
+
+			String sql = "SELECT " +
+					"Customers.id AS id, " +
+					"Customers.name AS name, " +
+					"Customers.balance AS balance " +
+					"FROM Customers";
+			
+			long id;
+			float balance;
+			String name;
+			
+			try {
+				Statement stmt = con.createStatement();
+				rs = stmt.executeQuery(sql);
+				
+				while(rs.next())
+				{
+					id = rs.getLong("id");
+					name = rs.getString("name");
+					balance = rs.getFloat("balance");
+					
+					System.out.println("Customer ID: " + id);
+					System.out.println("Name: " + name);
+					System.out.println("Balance: " + balance + "\n");
+				}
+				
+			} finally {
+				con.close();
+				if(rs != null) {
+					rs.close();
+				}
+			}
+			
+			return;
+		} catch (SQLException e) {
+			return;
+		}
+	}
+	
+	protected void printCheckoutCardTable() {
+		
+	}
 }
