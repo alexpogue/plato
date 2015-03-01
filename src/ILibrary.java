@@ -7,4 +7,5 @@ public interface ILibrary {
 	boolean checkOutMedia(long cid, long mid);
 	boolean checkInMedia(long mid);
 	boolean setLatePolicy(int daysUntilLate, float costPerDay);
+	boolean editBook(String title, String field, String newValue);
 }

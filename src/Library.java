@@ -1,4 +1,3 @@
-
 public class Library implements ILibrary{
 
 	private IDatabaseSupport databaseSupport;
@@ -12,6 +11,11 @@ public class Library implements ILibrary{
 		Book B= new Book();
 		B.setTitle(T);
 		return databaseSupport.putMedia(B);
+	}
+	@Override
+	public boolean editBook(String title, String field, String newValue){
+		return false;
+		
 	}
 
 	@Override
