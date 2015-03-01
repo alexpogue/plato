@@ -8,5 +8,7 @@ public interface ILibrary {
 	boolean checkOutMedia(long cid, long mid);
 	boolean checkInMedia(long mid);
 	boolean setLatePolicy(int daysUntilLate, float costPerDay);
-	boolean editBook(String title, String field, String newValue);
+	boolean editBookTitle(long mid, String newTitle);
+	boolean editBookAuthor(long mid, String newAuthor);
+	boolean editBookPublisher(long mid, String newPublisher);
 }

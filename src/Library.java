@@ -13,16 +13,32 @@ public class Library implements ILibrary{
 		return databaseSupport.putMedia(B);
 	}
 	@Override
-	public boolean editBook(String title, String field, String newValue){
-		return false;
-		
+	public boolean editBookTitle(long mid, String newTitle){
+		Media m = databaseSupport.getMedia(mid);
+		Book b = (Book) m;
+		b.setTitle(newTitle);
+		return databaseSupport.putMedia(b);
+	}
+	@Override
+	public boolean editBookAuthor(long mid, String newAuthor){
+		Media m = databaseSupport.getMedia(mid);
+		Book b = (Book) m;
+		b.setTitle(newAuthor);
+		return databaseSupport.putMedia(b);
+	}
+	@Override
+	public boolean editBookPublisher(long mid, String newPublisher){
+		Media m = databaseSupport.getMedia(mid);
+		Book b = (Book) m;
+		b.setTitle(newPublisher);
+		return databaseSupport.putMedia(b);
 	}
 
 	@Override
 	public boolean deleteBook(long mid) {
 		// TODO Make the call to delete the tuple with the media ID specified
 		databaseSupport.getMedia(mid);
-		// TODO remove the media
+		// TODO make sure the media is eliminated 
 		return true;
 	}
 

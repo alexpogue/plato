@@ -23,5 +23,5 @@ public abstract class Media {
 
 	public static enum Type {
 		Book
-	}
+	} 
 }
