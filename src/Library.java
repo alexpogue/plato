@@ -38,11 +38,8 @@ public class Library implements ILibrary{
 	}
 
 	@Override
-	public boolean deleteBook(long mid) {
-		// TODO Make the call to delete the tuple with the media ID specified
-		databaseSupport.getMedia(mid);
-		// TODO make sure the media is eliminated 
-		return true;
+	public boolean deleteBook(Media m) {
+		return databaseSupport.removeMedia(m);
 	}
 
 	@Override
@@ -53,10 +50,7 @@ public class Library implements ILibrary{
 
 	@Override
 	public boolean removeCustomer(long cid) {
-		// TODO Make the call to delete the tuple with the Customer ID specified
-		databaseSupport.getCustomer(cid);
-		// TODO remove the customer
-		return true;
+		return databaseSupport.removeCustomer(cid);
 	}
 	
 	public boolean editCustomerName(long cid, String newName)

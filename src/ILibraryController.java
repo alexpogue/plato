@@ -1,7 +1,7 @@
 
 public interface ILibraryController {
 	boolean addBook(String T);
-	boolean deleteBook(long mid);
+	boolean deleteBook(Media m);
 	boolean addCustomer(String name);
 	boolean removeCustomer(long cid);
 	boolean checkOutMedia(long cid, long mid);
