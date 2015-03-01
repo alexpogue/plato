@@ -179,13 +179,6 @@ public class DatabaseSupport implements IDatabaseSupport {
 	}
 
 	private boolean putBook(Book b) {
-		// TODO: Warning! Autoincrement field on books does not guarantee unique
-		//       ids on all media, only unique to the books. Must add a "Media"
-		//       table that generates the unique ids, which are then inserted as
-		//       the id of the "Books" table. Then we must worry about table
-		//       synchronization. For example, what if the database inserts into
-		//       media, and then the server immediately shuts down. That would
-		//       leave an orphaned id without a corresponding book.
 		// TODO: parameterize id rather than doing string manipulation (safer)
 		String sql = "INSERT INTO Books " +
 				"(id, title, author, publisher, isbn) VALUES (" + b.getId() + ", ?, ?, ?, ?)";
