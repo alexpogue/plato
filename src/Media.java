@@ -23,5 +23,13 @@ public abstract class Media {
 
 	public static enum Type {
 		Book
-	} 
+	}
+	
+	//TODO determine if we want this here or in each form of individual media
+	public CheckoutCard checkOut(long cid){
+		// TODO flesh out this method
+		return null;
+		
+	// Do we want checkIn within this abstract class
+	}
 }

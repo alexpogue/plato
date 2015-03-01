@@ -324,4 +324,16 @@ public class DatabaseSupport implements IDatabaseSupport {
 			return null;
 		}
 	}
+
+	@Override
+	public boolean putCheckoutCard(CheckoutCard cc) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public CheckoutCard getCheckoutCard(long ccid) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

@@ -66,7 +66,12 @@ public class Library implements ILibrary{
 
 	@Override
 	public boolean checkOutMedia(long cid, long mid) {
-		// TODO Auto-generated method stub
+		/*
+		 * 1. Get the media
+		 * 2. Get the customer
+		 * 3. Call checkOut on media
+		 * 
+		 */
 		return false;
 	}
 
@@ -77,6 +82,10 @@ public class Library implements ILibrary{
 	}
 
 	@Override
+	/* TODO Sort this out
+	 * Currently, we just have Book as media, but in the future, costs and the days until it's considered late will change for other types of media.
+	 * We're going to need to put one of these in every form of media.
+	 */
 	public boolean setLatePolicy(int daysUntilLate, float costPerDay) {
 		// TODO Auto-generated method stub
 		return false;
