@@ -1,3 +1,4 @@
+import java.util.List;
 
 public interface IDatabaseSupport {
 	boolean putMedia(Media m); 
@@ -6,7 +7,7 @@ public interface IDatabaseSupport {
 	boolean putCustomer(Customer c);
 	Customer getCustomer(long cid);
 	boolean removeCustomer(long cid);
-	CheckoutCard getRecentCheckoutCardForMedia(long mid);
+	List<CheckoutCard> getCheckoutCardsForMedia(long mid);
 	boolean putCheckoutCard(CheckoutCard cc);
 	LatePolicy getLatePolicy();
 	boolean putLatePolicy(LatePolicy lp);

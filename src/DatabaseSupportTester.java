@@ -37,6 +37,8 @@ public class DatabaseSupportTester {
 		user = dbcreds.get(1);
 		password = dbcreds.get(2);
 
+		printCheckoutCardTable();
+
 		DatabaseSupport ds = new DatabaseSupport(url, user, password);
 
 		Scanner scan = new Scanner(System.in);
@@ -116,7 +118,7 @@ public class DatabaseSupportTester {
 		scan.close();
 	}
 	
-protected void printBookTable() {	
+protected static void printBookTable() {
 	
 		Connection con = null;
 		try {
@@ -168,7 +170,7 @@ protected void printBookTable() {
 			
 	}
 	
-	protected void printCustomerTable() {
+	protected static void printCustomerTable() {
 		Connection con = null;
 		try {
 			con = DriverManager.getConnection(url, user, password);
@@ -213,7 +215,7 @@ protected void printBookTable() {
 		}
 	}
 	
-	protected void printCheckoutCardTable() {
+	protected static void printCheckoutCardTable() {
 		Connection con = null;
 		try {
 			con = DriverManager.getConnection(url, user, password);
@@ -238,8 +240,8 @@ protected void printBookTable() {
 				while(rs.next())
 				{
 					id = rs.getLong("id");
-					cid = rs.getLong("cid");
-					mid = rs.getLong("mid");
+					cid = rs.getLong("customerid");
+					mid = rs.getLong("mediaid");
 					
 					timeout = rs.getTimestamp("timeout");
 					timein = rs.getTimestamp("timein");
@@ -254,6 +256,10 @@ protected void printBookTable() {
 						String checkOutString = df.format(checkedOut);
 						System.out.println("Date checked out: " + checkOutString);
 					}
+					else
+					{
+						System.out.println("Date checked out: null");
+					}
 					
 					if(timein != null)
 					{
@@ -261,6 +267,11 @@ protected void printBookTable() {
 						String checkInString = df.format(checkedIn);
 						System.out.println("Date checked in: " + checkInString +"\n");
 					}
+					else
+					{
+						System.out.println("Date checked in: null");
+					}
+					System.out.println();
 
 				}
 				

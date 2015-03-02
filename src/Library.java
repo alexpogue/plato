@@ -1,4 +1,5 @@
 import java.util.Date;
+import java.util.List;
 
 public class Library implements ILibrary{
 
@@ -78,7 +79,9 @@ public class Library implements ILibrary{
 			// media with specified id does not exist
 			return false;
 		}
-		CheckoutCard cc = databaseSupport.getRecentCheckoutCardForMedia(mid);
+		List<CheckoutCard> cards = databaseSupport.getCheckoutCardsForMedia(mid);
+		// TODO: validate this checkout card's fields
+		CheckoutCard cc = findMostRecentCard(cards);
 		if(cc == null) {
 			// no checkout card exists for this media
 			return false;
@@ -89,6 +92,19 @@ public class Library implements ILibrary{
 		}
 		cc.setCheckInDate(new Date());
 		return databaseSupport.putCheckoutCard(cc);
+	}
+
+	private CheckoutCard findMostRecentCard(List<CheckoutCard> cards) {
+		CheckoutCard mostRecent = cards.get(0);
+		for(CheckoutCard card : cards) {
+			if(card.getCheckOutDate() == null) {
+				continue;
+			}
+			if(card.getCheckOutDate().after(mostRecent.getCheckOutDate())) {
+				mostRecent = card;
+			}
+		}
+		return mostRecent;
 	}
 
 	@Override

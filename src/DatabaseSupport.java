@@ -360,9 +360,49 @@ public class DatabaseSupport implements IDatabaseSupport {
 	}
 
 	@Override
-	public CheckoutCard getRecentCheckoutCardForMedia(long mid) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<CheckoutCard> getCheckoutCardsForMedia(long mid) {
+		String sql = "SELECT " +
+				"CheckoutCards.id AS id," +
+				"CheckoutCards.customerid AS customerid," +
+				"CheckoutCards.mediaid AS mediaid," +
+				"CheckoutCards.timeout AS timeout," +
+				"CheckoutCards.timein AS timein " +
+				"FROM CheckoutCards WHERE mediaid='"+ mid +"'";
+
+		List<CheckoutCard> cards = new ArrayList<CheckoutCard>();
+
+		Connection connection = null;
+		try {
+			connection = DriverManager.getConnection(url, user, password);
+			ResultSet resultSet = null;
+			try {
+				Statement statement = connection.createStatement();
+				resultSet = statement.executeQuery(sql);
+
+				while(resultSet.next()) {
+					long id = resultSet.getLong("id");
+					long customerId = resultSet.getLong("customerid");
+					long mediaId = resultSet.getLong("mediaid");
+					Timestamp checkOutTime = resultSet.getTimestamp("timeout");
+					Timestamp checkInTime = resultSet.getTimestamp("timein");
+					Date checkOutDate = null;
+					Date checkInDate = null;
+					if(checkOutTime != null) {
+						checkOutDate = new Date(checkOutTime.getTime());
+					}
+					if(checkInTime != null) {
+						checkInDate = new Date(checkInTime.getTime());
+					}
+					cards.add(new CheckoutCard(id, customerId, mediaId, checkOutDate, checkInDate));
+				}
+			} finally {
+				connection.close();
+			}
+		} catch (SQLException e) {
+			return null;
+		}
+
+		return cards;
 	}
 
 	@Override
