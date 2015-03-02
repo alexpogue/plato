@@ -8,6 +8,12 @@ public class CheckoutCard {
 	private Date checkedOut;
 	private Date checkedIn;
 	
+	public CheckoutCard(long cardId, long customerId, long mediaId) {
+		this.cardId = cardId;
+		this.customerId = customerId;
+		this.mediaId = mediaId;
+	}
+	
 	public CheckoutCard(long customerId, long mediaId) {
 		init(-1, customerId, mediaId, new Date(), null);
 	}
