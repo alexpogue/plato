@@ -10,19 +10,21 @@ import java.util.Date;
 import java.util.List;
 
 public class DatabaseSupport implements IDatabaseSupport {
-
-	private DatabaseSupportTester data = new DatabaseSupportTester();
+	
+	private String url;
+	private String user;
+	private String password;
 
 	public DatabaseSupport(String url, String user, String password) {
-		this.data.url = url;
-		this.data.user = user;
-		this.data.password = password;
+		this.url = url;
+		this.user = user;
+		this.password = password;
 	}
 	
 	private boolean executeSql(String sql, List<String> preparedStrings) {
 		Connection con = null;
 		try {
-			con = DriverManager.getConnection(data.url, data.user, data.password);
+			con = DriverManager.getConnection(url, user, password);
 
 			try {
 				PreparedStatement statement = con.prepareStatement(sql);
@@ -79,7 +81,7 @@ public class DatabaseSupport implements IDatabaseSupport {
 		String sql = "INSERT INTO Media DEFAULT VALUES";
 		Connection con = null;
 		try {
-			con = DriverManager.getConnection(data.url, data.user, data.password);
+			con = DriverManager.getConnection(url, user, password);
 			PreparedStatement statement = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 			statement.executeUpdate();
 			ResultSet generatedKeys = statement.getGeneratedKeys();
@@ -138,7 +140,7 @@ public class DatabaseSupport implements IDatabaseSupport {
 	private Book getBook(long bid) {
 		Connection con = null;
 		try {
-			con = DriverManager.getConnection(data.url, data.user, data.password);
+			con = DriverManager.getConnection(url, user, password);
 			ResultSet rs = null;
 
 			String sql = "SELECT " +
@@ -183,7 +185,7 @@ public class DatabaseSupport implements IDatabaseSupport {
 	public boolean removeMedia(Media m) {
 		Connection con = null;
 		try {
-			con = DriverManager.getConnection(data.url, data.user, data.password);
+			con = DriverManager.getConnection(url, user, password);
 			
 			Media.Type type = m.getType();
 			
@@ -216,8 +218,8 @@ public class DatabaseSupport implements IDatabaseSupport {
 	}
 	
 	@Override
+	// TODO: use a prepared int to insert the book id into the sql query (safer than string manipulation)
 	public boolean putCustomer(Customer c) {
-		// TODO Customer table needs to be added to database
 		String sql = "INSERT INTO Customers " +
 				"(name, balance) VALUES (" +
 				 + c.getId() + ", ?, " + c.getBalanceOwed() + " )";
@@ -239,7 +241,7 @@ public class DatabaseSupport implements IDatabaseSupport {
 	public Customer getCustomer(long cid) {
 		Connection con = null;
 		try {
-			con = DriverManager.getConnection(data.url, data.user, data.password);
+			con = DriverManager.getConnection(url, user, password);
 			ResultSet rs = null;
 
 			String sql = "SELECT " +
@@ -278,7 +280,7 @@ public class DatabaseSupport implements IDatabaseSupport {
 	public boolean removeCustomer(long cid) {
 		Connection con = null;
 		try {
-			con = DriverManager.getConnection(data.url, data.user, data.password);
+			con = DriverManager.getConnection(url, user, password);
 			
 			String sql = "DELETE FROM Customers WHERE id=?";
 			
@@ -326,7 +328,7 @@ public class DatabaseSupport implements IDatabaseSupport {
 
 		Connection con = null;
 		try {
-			con = DriverManager.getConnection(data.url, data.user, data.password);
+			con = DriverManager.getConnection(url, user, password);
 			ResultSet rs = null;
 
 			String sql = "INSERT INTO CheckoutCards " +
@@ -378,117 +380,4 @@ public class DatabaseSupport implements IDatabaseSupport {
 		return false;
 	}
 	
-	protected void printBookTable() {
-		
-		Connection con = null;
-		try {
-			con = DriverManager.getConnection(data.url, data.user, data.password);
-			ResultSet rs = null;
-
-			String sql = "SELECT " +
-					"Books.id AS id," +
-					"Books.title AS title," +
-					"Books.author AS author," +
-					"Books.publisher AS publisher," +
-					"Books.isbn AS isbn " +
-					"FROM Books";
-			
-			long id;
-			String title, author, publisher, isbn;
-
-			try {
-				Statement stmt = con.createStatement();
-				rs = stmt.executeQuery(sql);
-				
-				while(rs.next())
-				{
-					id = rs.getLong("id");
-					title = rs.getString("title");
-					author = rs.getString("author");
-					publisher = rs.getString("publisher");
-					isbn = rs.getString("isbn");
-					
-					System.out.println("Book Id: " + id);
-					System.out.println("Title: " + title);
-					System.out.println("Author: " + author);
-					System.out.println("Publisher: " + publisher);
-					System.out.println("ISBN: " + isbn + "\n");
-				}
-
-			} finally {
-				con.close();
-				if(rs != null) {
-					rs.close();
-				}
-			}
-			
-			return;
-			
-		} catch (SQLException e) {
-			return;
-		}
-			
-	}
-	
-	protected void printCustomerTable() {
-		Connection con = null;
-		try {
-			con = DriverManager.getConnection(data.url, data.user, data.password);
-			ResultSet rs = null;
-
-			String sql = "SELECT " +
-					"Customers.id AS id, " +
-					"Customers.name AS name, " +
-					"Customers.balance AS balance " +
-					"FROM Customers";
-			
-			long id;
-			float balance;
-			String name;
-			
-			try {
-				Statement stmt = con.createStatement();
-				rs = stmt.executeQuery(sql);
-				
-				while(rs.next())
-				{
-					id = rs.getLong("id");
-					name = rs.getString("name");
-					balance = rs.getFloat("balance");
-					
-					System.out.println("Customer ID: " + id);
-					System.out.println("Name: " + name);
-					System.out.println("Balance: " + balance + "\n");
-				}
-				
-			} finally {
-				con.close();
-				if(rs != null) {
-					rs.close();
-				}
-			}
-			
-			return;
-			
-		} catch (SQLException e) {
-			return;
-		}
-	}
-	
-	protected void printCheckoutCardTable() {
-		Connection con = null;
-		try {
-			con = DriverManager.getConnection(data.url, data.user, data.password);
-			ResultSet rs = null;
-
-			String sql = "INSERT INTO CheckoutCards " +
-					"(customerid, mediaid, timeout, timein) " +
-					"VALUES (?, ?, ?, ?);";
-			
-			return;
-			
-		} catch (SQLException e) {
-			return;
-		}
-	}
 }

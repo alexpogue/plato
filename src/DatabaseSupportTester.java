@@ -3,18 +3,25 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 
 
 public class DatabaseSupportTester {
-	public String url;
-	public String user;
-	public String password;
-
-	public DatabaseSupportTester() {
-	}
+	
+	private static String url;
+	private static String user;
+	private static String password;
 	
 	public static void main(String[] args)
 	{
@@ -26,9 +33,9 @@ public class DatabaseSupportTester {
 			System.out.println(e.getMessage());
 			return;
 		}
-		String url = dbcreds.get(0);
-		String user = dbcreds.get(1);
-		String password = dbcreds.get(2);
+		url = dbcreds.get(0);
+		user = dbcreds.get(1);
+		password = dbcreds.get(2);
 
 		DatabaseSupport ds = new DatabaseSupport(url, user, password);
 
@@ -107,5 +114,167 @@ public class DatabaseSupportTester {
 			System.out.println("Fail :(");
 		}
 		scan.close();
+	}
+	
+protected void printBookTable() {	
+	
+		Connection con = null;
+		try {
+			con = DriverManager.getConnection(url, user, password);
+			ResultSet rs = null;
+
+			String sql = "SELECT " +
+					"Books.id AS id," +
+					"Books.title AS title," +
+					"Books.author AS author," +
+					"Books.publisher AS publisher," +
+					"Books.isbn AS isbn " +
+					"FROM Books";
+			
+			long id;
+			String title, author, publisher, isbn;
+
+			try {
+				Statement stmt = con.createStatement();
+				rs = stmt.executeQuery(sql);
+				
+				while(rs.next())
+				{
+					id = rs.getLong("id");
+					title = rs.getString("title");
+					author = rs.getString("author");
+					publisher = rs.getString("publisher");
+					isbn = rs.getString("isbn");
+					
+					System.out.println("Book Id: " + id);
+					System.out.println("Title: " + title);
+					System.out.println("Author: " + author);
+					System.out.println("Publisher: " + publisher);
+					System.out.println("ISBN: " + isbn + "\n");
+				}
+
+			} finally {
+				con.close();
+				if(rs != null) {
+					rs.close();
+				}
+			}
+			
+			return;
+			
+		} catch (SQLException e) {
+			return;
+		}
+			
+	}
+	
+	protected void printCustomerTable() {
+		Connection con = null;
+		try {
+			con = DriverManager.getConnection(url, user, password);
+			ResultSet rs = null;
+
+			String sql = "SELECT " +
+					"Customers.id AS id, " +
+					"Customers.name AS name, " +
+					"Customers.balance AS balance " +
+					"FROM Customers";
+			
+			long id;
+			float balance;
+			String name;
+			
+			try {
+				Statement stmt = con.createStatement();
+				rs = stmt.executeQuery(sql);
+				
+				while(rs.next())
+				{
+					id = rs.getLong("id");
+					name = rs.getString("name");
+					balance = rs.getFloat("balance");
+					
+					System.out.println("Customer ID: " + id);
+					System.out.println("Name: " + name);
+					System.out.println("Balance: " + balance + "\n");
+				}
+				
+			} finally {
+				con.close();
+				if(rs != null) {
+					rs.close();
+				}
+			}
+			
+			return;
+			
+		} catch (SQLException e) {
+			return;
+		}
+	}
+	
+	protected void printCheckoutCardTable() {
+		Connection con = null;
+		try {
+			con = DriverManager.getConnection(url, user, password);
+			ResultSet rs = null;
+
+			String sql = "SELECT " +
+					"CheckoutCards.id AS id, " +
+					"CheckoutCards.customerid AS customerid, " +
+					"CheckoutCards.mediaid AS mediaid, " +
+					"CheckoutCards.timeout AS timeout, " +
+					"CheckoutCards.timein AS timein " +
+					"FROM CheckoutCards";
+			
+			long id, cid, mid;
+			Timestamp timeout, timein;
+			DateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+			
+			try {
+				Statement stmt = con.createStatement();
+				rs = stmt.executeQuery(sql);
+				
+				while(rs.next())
+				{
+					id = rs.getLong("id");
+					cid = rs.getLong("cid");
+					mid = rs.getLong("mid");
+					
+					timeout = rs.getTimestamp("timeout");
+					timein = rs.getTimestamp("timein");
+					
+					System.out.println("Checkout ID: " + id);
+					System.out.println("Checked out by Customer #: " + cid);
+					System.out.println("Media checked out (Media #): " + mid);
+					
+					if(timeout != null)
+					{
+						Date checkedOut = new Date(timeout.getTime());
+						String checkOutString = df.format(checkedOut);
+						System.out.println("Date checked out: " + checkOutString);
+					}
+					
+					if(timein != null)
+					{
+						Date checkedIn = new Date(timein.getTime());
+						String checkInString = df.format(checkedIn);
+						System.out.println("Date checked in: " + checkInString +"\n");
+					}
+
+				}
+				
+			} finally {
+				con.close();
+				if(rs != null) {
+					rs.close();
+				}
+			}
+			
+			return;
+			
+		} catch (SQLException e) {
+			return;
+		}
 	}
 }

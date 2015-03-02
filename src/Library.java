@@ -1,6 +1,5 @@
 import java.util.Date;
 
-
 public class Library implements ILibrary{
 
 	private IDatabaseSupport databaseSupport;

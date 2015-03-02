@@ -1,4 +1,5 @@
 
+//TODO we want a main method that tests our library function
 public class LibraryController implements ILibraryController {
 	private ILibrary library;
 	
