@@ -407,7 +407,10 @@ public class DatabaseSupport implements IDatabaseSupport {
 
 	@Override
 	public LatePolicy getLatePolicy() {
-		// TODO Auto-generated method stub
+		String sql = "SELECT " +
+				"LatePolicies.name AS name," +
+				"LatePolicies.daysUntilLate AS daysUntilLate," +
+				"LatePolicies.costPerDay AS costPerDay";
 		return null;
 	}
 
