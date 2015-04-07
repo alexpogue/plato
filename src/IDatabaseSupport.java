@@ -11,4 +11,6 @@ public interface IDatabaseSupport {
 	boolean putCheckoutCard(CheckoutCard cc);
 	LatePolicy getLatePolicy();
 	boolean putLatePolicy(LatePolicy lp);
+	User getUser(String uid);
+	
 }

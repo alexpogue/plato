@@ -1,7 +1,8 @@
 
 public class ErrorContainer implements IErrorContainer
 {
-	ErrorCode errorCode;
+	private ErrorCode errorCode;
+	
 	@Override
 	public void setError(ErrorCode e) {
 		errorCode = e;
