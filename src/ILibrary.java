@@ -1,3 +1,5 @@
+import java.util.List;
+
 
 public interface ILibrary {
 	boolean addBook(String T);
@@ -16,6 +18,6 @@ public interface ILibrary {
 	boolean isMediaCheckedOut(long mid, ErrorContainer err);
 	float calculateMediaLateFee(long mid, ErrorContainer err);
 	Error payMediaLateFee(long mid, float amount);
-	List<Books> searchBooks(MediaType field, String searchString);
+	List<Book> searchBooks(Media.MediaType field, String searchString);
 
 }
