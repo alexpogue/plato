@@ -159,13 +159,13 @@ public class Library implements ILibrary{
 	}
 
 	@Override
-	public void viewCustomer(long mid) {
+	public void viewCustomer(long mid, ICustomerDisplay cd) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void viewBook(long bid) {
+	public void viewBook(long bid, IBookDisplay bd) {
 		// TODO Auto-generated method stub
 		
 	}

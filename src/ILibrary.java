@@ -14,8 +14,8 @@ public interface ILibrary {
 	boolean editBookPublisher(long mid, String newPublisher);
 	
 	//Iteration 2
-	void viewCustomer(long mid);
-	void viewBook(long bid);
+	void viewCustomer(long mid, ICustomerDisplay cd);
+	void viewBook(long bid, IBookDisplay bd);
 	boolean isMediaCheckedOut(long mid, ErrorContainer err);
 	float calculateMediaLateFee(long mid, ErrorContainer err);
 	Error payMediaLateFee(long mid, float amount);
