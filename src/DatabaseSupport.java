@@ -41,7 +41,7 @@ public class DatabaseSupport implements IDatabaseSupport {
 		}
 	}
 
-	private String typeToTableName(Media.Type type)
+	private String typeToTableName(Media.MediaType type)
 	{
 		switch(type)
 		{
@@ -63,7 +63,7 @@ public class DatabaseSupport implements IDatabaseSupport {
 
 	private boolean putNewMedia(Media m) {
 		boolean success;
-		Media.Type type = m.getType();
+		Media.MediaType type = m.getType();
 		long id = getNewMediaId();
 		m.setId(id);
 		switch(type) {
@@ -107,7 +107,7 @@ public class DatabaseSupport implements IDatabaseSupport {
 
 	private boolean updateOldMedia(Media m) {
 		boolean success;
-		Media.Type type = m.getType();
+		Media.MediaType type = m.getType();
 		switch(type) {
 		case Book:
 			success = updateBook((Book) m);
@@ -187,7 +187,7 @@ public class DatabaseSupport implements IDatabaseSupport {
 		try {
 			con = DriverManager.getConnection(url, user, password);
 			
-			Media.Type type = m.getType();
+			Media.MediaType type = m.getType();
 			
 			String sql1 = "DELETE FROM ?" +
 					" WHERE id=?";

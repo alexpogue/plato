@@ -1,9 +1,9 @@
 
 public abstract class Media implements IMedia {
 	private long id;
-	private Type type;
+	private MediaType type;
 
-	public Media(long id, Type type) {
+	public Media(long id, MediaType type) {
 		this.id = id;
 		this.type = type;
 	}
@@ -16,11 +16,11 @@ public abstract class Media implements IMedia {
 		this.id = id;
 	}
 
-	public Type getType() {
+	public MediaType getType() {
 		return type;
 	}
 
-	public static enum Type {
+	public static enum MediaType {
 		Book
 	}
 }

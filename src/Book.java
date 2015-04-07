@@ -6,16 +6,16 @@ public class Book extends Media implements IBook {
 	private String isbn;
 		
 	public Book() {
-		super(-1, Type.Book);
+		super(-1, MediaType.Book);
 	}
 
 	public Book(String title, String author, String publisher, String isbn) {
-		super(-1, Type.Book);
+		super(-1, MediaType.Book);
 		init(title, author, publisher, isbn);
 	}
 
 	public Book(long id, String title, String author, String publisher, String isbn) {
-		super(id, Type.Book);
+		super(id, MediaType.Book);
 		init(title, author, publisher, isbn);
 	}
 
@@ -29,7 +29,7 @@ public class Book extends Media implements IBook {
 	public Book(long id, String title)
 	{
 		//TODO generate long id in library
-		super(id, Type.Book);
+		super(id, MediaType.Book);
 		this.title = title;
 	}
 
