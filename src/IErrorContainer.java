@@ -1,6 +1,10 @@
 
 public interface IErrorContainer {
-		void setError(Err e);
-		Err getError();
+		void setError(ErrorCode e);
+		ErrorCode getError();
+		
+		public static enum ErrorCode {
+			//TODO: Define the enumeration
+		}
 }
 

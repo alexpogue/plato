@@ -147,8 +147,15 @@ public class Library implements ILibrary{
 	 * TODO it will be fixed after ErrorContainer is done
 	 * @see ILibrary#payMediaLateFee(long, float)
 	 */
-	Error payMediaLateFee(long mid, float amount){
-		return void;
+	public Error payMediaLateFee(long mid, float amount){
+		//TODO: Write da code
+		return null;
+	}
+
+	@Override
+	public List<Book> searchBooks(Media.MediaType field, String searchString) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 	

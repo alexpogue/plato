@@ -1,17 +1,15 @@
 
 public class ErrorContainer implements IErrorContainer
 {
-
+	ErrorCode errorCode;
 	@Override
-	public void setError(Err e) {
-		// TODO Auto-generated method stub
-		
+	public void setError(ErrorCode e) {
+		errorCode = e;
+		return;
 	}
 
 	@Override
-	public Err getError() {
-		// TODO Auto-generated method stub
-		return null;
+	public ErrorCode getError() {
+		return errorCode;
 	}
-	
 }
