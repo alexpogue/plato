@@ -129,4 +129,28 @@ public class Library implements ILibrary{
 		return databaseSupport.putLatePolicy(lp);
 	}
 	
+	//START ITERATION 2 HERE!
+	/*
+	 * TODO Know more when ErrorContainer is done
+	 * @see ILibrary#isMediaCheckedOut(long, ErrorContainer)
+	 */
+	public boolean isMediaCheckedOut(long mid, ErrorContainer err){
+		return false;
+	}
+	/*
+	 * TODO
+	 */
+	public float calculateMediaLateFee(long mid, ErrorContainer err){
+		return 0;
+	}
+	/*
+	 * TODO it will be fixed after ErrorContainer is done
+	 * @see ILibrary#payMediaLateFee(long, float)
+	 */
+	Error payMediaLateFee(long mid, float amount){
+		return void;
+	}
+	
+	
+	
 }
