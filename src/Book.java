@@ -64,4 +64,8 @@ public class Book extends Media implements IBook {
 	public void setIsbn(String isbn) {
 		this.isbn = isbn;
 	}
+	
+	public static enum BookField {
+		Title, Author, Publisher, ISBN
+	}
 }

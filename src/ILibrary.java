@@ -1,6 +1,5 @@
 import java.util.List;
 
-
 public interface ILibrary {
 	boolean addBook(String T);
 	boolean deleteBook(Media m);
@@ -13,11 +12,13 @@ public interface ILibrary {
 	boolean editBookTitle(long mid, String newTitle);
 	boolean editBookAuthor(long mid, String newAuthor);
 	boolean editBookPublisher(long mid, String newPublisher);
+	
 	//Iteration 2
 	//get back to viewCustomer(long mid);
+	// viewBook(long bid); ditto
 	boolean isMediaCheckedOut(long mid, ErrorContainer err);
 	float calculateMediaLateFee(long mid, ErrorContainer err);
 	Error payMediaLateFee(long mid, float amount);
-	List<Book> searchBooks(Media.MediaType field, String searchString);
+	List<Book> searchBooks(Book.BookField field, String searchString);
 
 }

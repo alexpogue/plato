@@ -11,6 +11,10 @@ public interface IDatabaseSupport {
 	boolean putCheckoutCard(CheckoutCard cc);
 	LatePolicy getLatePolicy();
 	boolean putLatePolicy(LatePolicy lp);
-	User getUser(String uid);
 	
+	//Iteration 2
+	CheckoutCard getMostRecentCheckoutCardForMedia(long mid);
+	List<Book> SearchBooks(Book.BookField field,String searchString);
+	User getUser(String uid);
+
 }

@@ -153,7 +153,7 @@ public class Library implements ILibrary{
 	}
 
 	@Override
-	public List<Book> searchBooks(Media.MediaType field, String searchString) {
+	public List<Book> searchBooks(Book.BookField field, String searchString) {
 		// TODO Auto-generated method stub
 		return null;
 	}
