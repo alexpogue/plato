@@ -11,5 +11,11 @@ public interface ILibrary {
 	boolean editBookTitle(long mid, String newTitle);
 	boolean editBookAuthor(long mid, String newAuthor);
 	boolean editBookPublisher(long mid, String newPublisher);
-	 viewCustomer(long mid);
+	//Iteration 2
+	viewCustomer(long mid);
+	boolean isMediaCheckedOut(long mid, ErrorContainer err);
+	float calculateMediaLateFee(long mid, ErrorContainer err);
+	Error payMediaLateFee(long mid, float amount);
+	List<Books> searchBooks(MediaType field, String searchString);
+
 }
