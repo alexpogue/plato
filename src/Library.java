@@ -1,9 +1,12 @@
 import java.util.Date;
 import java.util.List;
 
+import IUser.UserType;
+
 public class Library implements ILibrary{
 
 	private IDatabaseSupport databaseSupport;
+	private IUser loggedIn;
 	
 	public String editTitle(String s){
 		return "";
@@ -166,6 +169,31 @@ public class Library implements ILibrary{
 
 	@Override
 	public void viewBook(long bid, IBookDisplay bd) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public IUser.UserType login(String uid, String pass) {
+		if(loggedIn != null)
+		{
+			// A user is already logged in
+			return null;
+		}
+		else
+		{
+			User u = databaseSupport.getUser(uid);
+			IUser.UserType utype = u.validate(pass);
+			if(utype != null)
+			{
+				loggedIn = u;
+			}
+			return utype;
+		}
+	}
+
+	@Override
+	public void logout(User u) {
 		// TODO Auto-generated method stub
 		
 	}

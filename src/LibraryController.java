@@ -1,5 +1,7 @@
 import java.util.List;
 
+import IUser.UserType;
+
 //TODO we want a main method that tests our library function
 public class LibraryController implements ILibraryController {
 	private ILibrary library;
@@ -77,6 +79,17 @@ public class LibraryController implements ILibraryController {
 	public void viewBook(long bid, IBookDisplay bd) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public UserType login(String uid, String pass) {
+		return library.login(uid, pass);
+	}
+
+	@Override
+	public void logout(User u) {
+		library.logout(u);
+		return;
 	}
 
 }

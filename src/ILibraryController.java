@@ -17,5 +17,9 @@ public interface ILibraryController {
 	float calculateMediaLateFee(long mid, ErrorContainer err);
 	Error payMediaLateFee(long mid, float amount);
 	List<Book> searchBooks(Book.BookField field, String searchString);
+	
+	//Library is going to handle logins
+	public IUser.UserType login(String uid, String pass);
+	public void logout(User u);
 
 }

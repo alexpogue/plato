@@ -20,5 +20,8 @@ public interface ILibrary {
 	float calculateMediaLateFee(long mid, ErrorContainer err);
 	Error payMediaLateFee(long mid, float amount);
 	List<Book> searchBooks(Book.BookField field, String searchString);
-
+	
+	//This may be a bit strange, but our application tracks who is currently logged in.
+	IUser.UserType login(String uid, String pass);
+	void logout(User u);
 }
