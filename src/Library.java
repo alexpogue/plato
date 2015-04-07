@@ -57,16 +57,23 @@ public class Library implements ILibrary{
 	{
 		Customer customer = databaseSupport.getCustomer(cid);
 		customer.setName(newName);
-		
+
 		return databaseSupport.putCustomer(customer);
 	}
 
 	@Override
 	public boolean checkOutMedia(long cid, long mid) {
-		Media m = databaseSupport.getMedia(mid);
-		Customer c = databaseSupport.getCustomer(cid);
-		if(m == null || c == null) {
+		if(databaseSupport.getMedia(mid) == null) {
 			// TODO: communicate these specific errors to the outside world
+			return false;
+		}
+		if(databaseSupport.getCustomer(cid) == null) {
+			return false;
+		}
+
+		List<CheckoutCard> cards = databaseSupport.getCheckoutCardsForMedia(mid);
+		CheckoutCard recent = findMostRecentCard(cards);
+		if(recent.isCheckedOut()) {
 			return false;
 		}
 		CheckoutCard cc = new CheckoutCard(cid, mid);
@@ -86,8 +93,13 @@ public class Library implements ILibrary{
 			// no checkout card exists for this media
 			return false;
 		}
-		if(cc.getCheckInDate() != null) {
-			// media has already been checked in
+		if(cc.isCheckedOut() == false) {
+			// media is not checked out
+			return false;
+		}
+		long cid = cc.getCustomerId();
+		if(databaseSupport.getCustomer(cid) == null) {
+			// customer is not in the system
 			return false;
 		}
 		cc.setCheckInDate(new Date());

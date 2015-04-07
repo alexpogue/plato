@@ -79,4 +79,8 @@ public class CheckoutCard {
 	public void setCheckInDate(Date checkInDate) {
 		checkedIn = checkInDate;
 	}
+
+	public boolean isCheckedOut() {
+		return checkedOut != null && checkedIn == null;
+	}
 }
