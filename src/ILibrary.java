@@ -11,4 +11,5 @@ public interface ILibrary {
 	boolean editBookTitle(long mid, String newTitle);
 	boolean editBookAuthor(long mid, String newAuthor);
 	boolean editBookPublisher(long mid, String newPublisher);
+	 viewCustomer(long mid);
 }
