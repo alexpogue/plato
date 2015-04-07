@@ -88,7 +88,7 @@ public class DatabaseSupportTester {
 			long id = scan.nextLong();
 			scan.nextLine();
 			Media m = ds.getMedia(id);
-			if(m != null && m.getType() == Media.Type.Book) {
+			if(m != null && m.getType() == Media.MediaType.Book) {
 				Book b = (Book) m;
 				System.out.println("Got book:");
 				System.out.println("  title = " + b.getTitle());
