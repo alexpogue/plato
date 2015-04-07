@@ -157,6 +157,18 @@ public class Library implements ILibrary{
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public void viewCustomer(long mid) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void viewBook(long bid) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 	
 	

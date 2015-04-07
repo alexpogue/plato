@@ -67,4 +67,16 @@ public class LibraryController implements ILibraryController {
 		return null;
 	}
 
+	@Override
+	public void viewCustomer(long mid) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void viewBook(long bid) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
