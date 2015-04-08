@@ -194,8 +194,12 @@ public class Library implements ILibrary{
 
 	@Override
 	public void logout(User u) {
-		// TODO Auto-generated method stub
+		if(loggedIn != null)
+		{
+			loggedIn = null;
+		}
 		
+		return;
 	}
 	
 	
