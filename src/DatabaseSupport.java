@@ -419,6 +419,8 @@ public class DatabaseSupport implements IDatabaseSupport {
 		// TODO Auto-generated method stub
 		return false;
 	}
+	
+	// Iteration 2 starts here!
 
 	@Override
 	public User getUser(String uid) {
