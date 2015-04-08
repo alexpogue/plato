@@ -155,8 +155,7 @@ public class Library implements ILibrary{
 
 	@Override
 	public List<Book> searchBooks(Book.BookField field, String searchString) {
-		// TODO Auto-generated method stub
-		return null;
+		return databaseSupport.SearchBooks(field, searchString);
 	}
 
 	@Override
@@ -183,6 +182,9 @@ public class Library implements ILibrary{
 		else
 		{
 			User u = databaseSupport.getUser(uid);
+			if(u == null)
+				return null;
+	
 			IUser.UserType utype = u.validate(pass);
 			if(utype != null)
 			{
@@ -201,7 +203,5 @@ public class Library implements ILibrary{
 		
 		return;
 	}
-	
-	
 	
 }

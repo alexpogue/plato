@@ -27,6 +27,7 @@ public class User implements IUser {
 		
 		else
 		{
+			//Password is incorrect
 			return null;
 		}
 	}
