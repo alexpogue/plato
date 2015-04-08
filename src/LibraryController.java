@@ -70,14 +70,14 @@ public class LibraryController implements ILibraryController {
 	}
 
 	@Override
-	public void viewCustomer(long mid, ICustomerDisplay cd) {
-		// TODO Auto-generated method stub
+	public void viewCustomer(long cid, ICustomerDisplay cd) {
+		library.viewCustomer(cid, cd);
 		
 	}
 
 	@Override
 	public void viewBook(long bid, IBookDisplay bd) {
-		// TODO Auto-generated method stub
+		library.viewBook(bid, bd);
 		
 	}
 

@@ -162,14 +162,16 @@ public class Library implements ILibrary{
 	}
 
 	@Override
-	public void viewCustomer(long mid, ICustomerDisplay cd) {
-		// TODO Auto-generated method stub
+	public void viewCustomer(long cid, ICustomerDisplay cd) {
+		Customer c = databaseSupport.getCustomer(cid);
+		cd.display(c);
 		
 	}
 
 	@Override
 	public void viewBook(long bid, IBookDisplay bd) {
-		// TODO Auto-generated method stub
+		Book b = (Book)databaseSupport.getMedia(bid);
+		bd.display(b);
 		
 	}
 
