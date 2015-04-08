@@ -421,6 +421,12 @@ public class DatabaseSupport implements IDatabaseSupport {
 	}
 
 	@Override
+	public Media.MediaType getMediaType(long mid) {
+		// TODO
+		return Media.MediaType.Error;
+	}
+
+	@Override
 	public User getUser(String uid) {
 		// TODO Auto-generated method stub
 		return null;

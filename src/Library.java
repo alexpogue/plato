@@ -131,25 +131,65 @@ public class Library implements ILibrary{
 	}
 	
 	//START ITERATION 2 HERE!
-	/*
-	 * TODO Know more when ErrorContainer is done
-	 * @see ILibrary#isMediaCheckedOut(long, ErrorContainer)
-	 */
+
 	public boolean isMediaCheckedOut(long mid, ErrorContainer err){
-		return false;
+		Media m = databaseSupport.getMedia(mid);
+		if(m == null) {
+			err.setError(IErrorContainer.ErrorCode.MediaNotFound);
+			return false;
+		}
+		CheckoutCard cc = databaseSupport.getMostRecentCheckoutCardForMedia(mid);
+		boolean b = cc.isCheckedOut();
+		err.setError(IErrorContainer.ErrorCode.Success);
+		return b;
 	}
-	/*
-	 * TODO
-	 */
+
 	public float calculateMediaLateFee(long mid, ErrorContainer err){
-		return 0;
+		Media.MediaType mt = databaseSupport.getMediaType(mid);
+		if(mt == Media.MediaType.Error) {
+			// couldn't find the media
+			err.setError(IErrorContainer.ErrorCode.MediaNotFound);
+			return -1.0f;
+		}
+		CheckoutCard cc = databaseSupport.getMostRecentCheckoutCardForMedia(mid);
+		boolean checkedOut = cc.isCheckedOut();
+		if(cc == null || !checkedOut) {
+			err.setError(IErrorContainer.ErrorCode.MediaNotCheckedOut);
+			return -1.0f;
+		}
+		LatePolicy lp = databaseSupport.getLatePolicy();
+		if(lp == null) {
+			err.setError(IErrorContainer.ErrorCode.LatePolicyNotFound);
+			return -1.0f;
+		}
+		Float fee = (new LateFeeCalculator()).calculateMediaLateFee(mt, cc, lp);
+		err.setError(IErrorContainer.ErrorCode.Success);
+		return fee;
 	}
 	/*
 	 * TODO it will be fixed after ErrorContainer is done
 	 * @see ILibrary#payMediaLateFee(long, float)
 	 */
-	public Error payMediaLateFee(long mid, float amount){
-		//TODO: Write da code
+	public IErrorContainer.ErrorCode payMediaLateFee(long mid, float amount){
+		Media.MediaType mt = databaseSupport.getMediaType(mid);
+		if(mt == Media.MediaType.Error) {
+			return IErrorContainer.ErrorCode.MediaNotFound;
+		}
+		CheckoutCard cc = databaseSupport.getMostRecentCheckoutCardForMedia(mid);
+		boolean checkedOut = cc.isCheckedOut();
+		if(cc == null || !checkedOut) {
+			return IErrorContainer.ErrorCode.MediaNotCheckedOut;
+		}
+		LatePolicy lp = databaseSupport.getLatePolicy();
+		if(lp == null) {
+			return IErrorContainer.ErrorCode.LatePolicyNotFound;
+		}
+		boolean goodAmount = (new LateFeeCalculator()).amountIsAppropriate(mt, cc, lp, amount);
+		if(!goodAmount) {
+			return IErrorContainer.ErrorCode.BadAmount;
+		}
+		cc.payLateFee(amount);
+		databaseSupport.putCheckoutCard(cc);
 		return null;
 	}
 

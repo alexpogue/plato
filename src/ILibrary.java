@@ -18,7 +18,7 @@ public interface ILibrary {
 	void viewBook(long bid, IBookDisplay bd);
 	boolean isMediaCheckedOut(long mid, ErrorContainer err);
 	float calculateMediaLateFee(long mid, ErrorContainer err);
-	Error payMediaLateFee(long mid, float amount);
+	IErrorContainer.ErrorCode payMediaLateFee(long mid, float amount);
 	List<Book> searchBooks(Book.BookField field, String searchString);
 	
 	//This may be a bit strange, but our application tracks who is currently logged in.

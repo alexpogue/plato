@@ -13,6 +13,7 @@ public interface IDatabaseSupport {
 	boolean putLatePolicy(LatePolicy lp);
 	
 	//Iteration 2
+	Media.MediaType getMediaType(long mid);
 	CheckoutCard getMostRecentCheckoutCardForMedia(long mid);
 	List<Book> SearchBooks(Book.BookField field,String searchString);
 	User getUser(String uid);

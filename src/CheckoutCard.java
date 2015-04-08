@@ -1,12 +1,12 @@
 import java.util.Date;
 
-
-public class CheckoutCard {
+public class CheckoutCard implements ICheckoutCard{
 	private long cardId;
 	private long customerId;
 	private long mediaId;
 	private Date checkedOut;
 	private Date checkedIn;
+	private float lateFeeAmountPaid;
 	
 	public CheckoutCard(long cardId, long customerId, long mediaId) {
 		this.cardId = cardId;
@@ -82,5 +82,13 @@ public class CheckoutCard {
 
 	public boolean isCheckedOut() {
 		return checkedOut != null && checkedIn == null;
+	}
+
+	public float getLateFeeAmountPaid() {
+		return lateFeeAmountPaid;
+	}
+
+	public void payLateFee(float amount) {
+		lateFeeAmountPaid += amount;
 	}
 }

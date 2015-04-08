@@ -54,7 +54,7 @@ public class LibraryController implements ILibraryController {
 	}
 
 	@Override
-	public Error payMediaLateFee(long mid, float amount) {
+	public IErrorContainer.ErrorCode payMediaLateFee(long mid, float amount) {
 		return library.payMediaLateFee(mid, amount);
 	}
 

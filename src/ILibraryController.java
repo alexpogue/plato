@@ -1,6 +1,5 @@
 import java.util.List;
 
-
 public interface ILibraryController {
 	boolean addBook(String T);
 	boolean deleteBook(Media m);
@@ -15,7 +14,7 @@ public interface ILibraryController {
 	void viewBook(long bid, IBookDisplay bd);
 	boolean isMediaCheckedOut(long mid, ErrorContainer err);
 	float calculateMediaLateFee(long mid, ErrorContainer err);
-	Error payMediaLateFee(long mid, float amount);
+	IErrorContainer.ErrorCode payMediaLateFee(long mid, float amount);
 	List<Book> searchBooks(Book.BookField field, String searchString);
 	
 	//Library is going to handle logins
