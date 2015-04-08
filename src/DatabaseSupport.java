@@ -419,6 +419,8 @@ public class DatabaseSupport implements IDatabaseSupport {
 		// TODO Auto-generated method stub
 		return false;
 	}
+	
+	// Iteration 2 starts here!
 
 	@Override
 	public Media.MediaType getMediaType(long mid) {
@@ -428,8 +430,42 @@ public class DatabaseSupport implements IDatabaseSupport {
 
 	@Override
 	public User getUser(String uid) {
-		// TODO Auto-generated method stub
-		return null;
+		Connection con = null;
+		try {
+			con = DriverManager.getConnection(url, user, password);
+			ResultSet rs = null;
+			String sql = 	"SELECT " + 
+							"Users.id AS id," + 
+							"Users.password AS pass," + 
+							"Users.usertype AS utype " + 
+							"FROM Users WHERE id ='" + uid + "'";
+			
+			String id, pass;
+			IUser.UserType utype;
+			
+			try {
+				Statement stmt = con.createStatement();
+				rs = stmt.executeQuery(sql);
+				rs.next();
+				
+				id = rs.getString("id");
+				pass = rs.getString("pass");
+				
+				// Taylor: I'm not quite sure if this will be valid. It will be, in theory!
+				utype = (IUser.UserType) rs.getObject("utype");
+				
+			} finally {
+				con.close();
+				if(rs != null) {
+					rs.close();
+				}
+			}
+			
+			return new User(id, pass, utype);
+			
+		} catch (SQLException e) {
+				return null;
+		}
 	}
 
 	@Override
@@ -440,8 +476,70 @@ public class DatabaseSupport implements IDatabaseSupport {
 
 	@Override
 	public List<Book> SearchBooks(Book.BookField field, String searchString) {
-		// TODO Auto-generated method stub
-		return null;
+		Connection con = null;
+		try {
+			con = DriverManager.getConnection(url, user, password);
+			ResultSet rs = null;
+			String sql = 	"Books.title AS title," +
+							"Books.author AS author," +
+							"Books.publisher AS publisher," +
+							"Books.isbn AS isbn " + 
+							"FROM Books WHERE ?=?";
+			
+			List<Book> blist = new ArrayList<Book>();
+			String title, author, publisher, isbn;
+			
+			try {
+				PreparedStatement stmt = con.prepareStatement(sql);
+		
+				switch(field)
+				{
+					
+					case Title:
+						stmt.setString(1, "title");
+						break;
+					
+					case Author:
+						stmt.setString(1, "author");
+						break;
+						
+					case Publisher:
+						stmt.setString(1, "publisher");
+						break;
+						
+					case ISBN:
+						stmt.setString(1, "isbn");
+						
+					default:
+						return null;
+				}
+				
+				stmt.setString(2, searchString);
+				rs = stmt.executeQuery(sql);
+				
+				while(rs.next())
+				{
+					title = rs.getString("title");
+					author = rs.getString("author");
+					publisher = rs.getString("publisher");
+					isbn = rs.getString("isbn");
+					
+					Book book = new Book(title, author, publisher, isbn);
+					blist.add(book);
+				}
+
+			} finally {
+				con.close();
+				if(rs != null) {
+					rs.close();
+				}
+			}
+			
+			return blist;
+			
+		} catch(SQLException e) {
+			return null;
+		}
 	}
 	
 }
