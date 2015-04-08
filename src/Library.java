@@ -1,8 +1,6 @@
 import java.util.Date;
 import java.util.List;
 
-import IUser.UserType;
-
 public class Library implements ILibrary{
 
 	private IDatabaseSupport databaseSupport;
