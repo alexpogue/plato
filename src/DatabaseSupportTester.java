@@ -43,7 +43,13 @@ public class DatabaseSupportTester {
 
 		Scanner scan = new Scanner(System.in);
 
-		System.out.print("Enter 'p' (put book), 'g' (get book), 'u' (update book), 'a' (put checkoutcard): ");
+		System.out.println("Options:");
+		System.out.println("  'p' (put book),");
+		System.out.println("  'g' (get book),");
+		System.out.println("  'u' (update book),");
+		System.out.println("  'a' (put checkoutcard),");
+		System.out.println("  't' (get media type)");
+		System.out.print("Choice: ");
 		String cmd = scan.nextLine();
 		char cmdc = cmd.charAt(0);
 		
@@ -108,6 +114,19 @@ public class DatabaseSupportTester {
 			System.out.print("Enter media id: ");
 			int mediaId = scan.nextInt();
 			success = ds.putCheckoutCard(new CheckoutCard(customerId, mediaId));
+		}
+		else if(cmdc == 't') {
+			System.out.println("Getting the media type:");
+			System.out.print("Enter media id: ");
+			int mediaId = scan.nextInt();
+			Media.MediaType type = ds.getMediaType(mediaId);
+			if(type == Media.MediaType.Error) {
+				success = false;
+			}
+			if(type == Media.MediaType.Book) {
+				System.out.println("Book");
+				success = true;
+			}
 		}
 		if(success) {
 			System.out.println("Success!");

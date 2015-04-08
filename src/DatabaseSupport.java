@@ -424,8 +424,42 @@ public class DatabaseSupport implements IDatabaseSupport {
 
 	@Override
 	public Media.MediaType getMediaType(long mid) {
-		// TODO
-		return Media.MediaType.Error;
+		Connection con = null;
+		try {
+			con = DriverManager.getConnection(url, user, password);
+			ResultSet rs = null;
+
+			String sql = "SELECT " +
+					"Media.tablename AS tablename " +
+					"FROM Media WHERE id='"+ mid +"'";
+
+			String tableName;
+
+			try {
+				Statement stmt = con.createStatement();
+				rs = stmt.executeQuery(sql);
+				rs.next();
+
+				tableName = rs.getString("tablename");
+
+			} finally {
+				con.close();
+				if(rs != null) {
+					rs.close();
+				}
+			}
+
+			if(tableName.equalsIgnoreCase("books")) {
+				return Media.MediaType.Book;
+			}
+			else {
+				// TODO: return something else if type not found to 
+				// differentiate from sql error.
+				return Media.MediaType.Error;
+			}
+		} catch (SQLException e) {
+			return Media.MediaType.Error;
+		}
 	}
 
 	@Override
