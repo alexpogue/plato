@@ -48,25 +48,25 @@ public class LibraryController implements ILibraryController {
 	@Override
 	public boolean isMediaCheckedOut(long mid, ErrorContainer err) {
 		// TODO Auto-generated method stub
-		return false;
+		return library.isMediaCheckedOut(mid, err);
 	}
 
 	@Override
 	public float calculateMediaLateFee(long mid, ErrorContainer err) {
 		// TODO Auto-generated method stub
-		return 0;
+		return library.calculateMediaLateFee(mid, err);
 	}
 
 	@Override
 	public Error payMediaLateFee(long mid, float amount) {
 		// TODO Auto-generated method stub
-		return null;
+		return library.payMediaLateFee(mid, amount);
 	}
 
 	@Override
 	public List<Book> searchBooks(Book.BookField field, String searchString) {
 		// TODO Auto-generated method stub
-		return null;
+		return library.searchBooks(field, searchString);
 	}
 
 	@Override
