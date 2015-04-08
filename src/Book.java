@@ -68,4 +68,7 @@ public class Book extends Media implements IBook {
 	public static enum BookField {
 		Title, Author, Publisher, ISBN
 	}
+	public void display(Book b){
+		
+	}
 }
