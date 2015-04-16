@@ -20,6 +20,10 @@ public abstract class Media implements IMedia {
 		return type;
 	}
 
+	public void setType(MediaType type) {
+		this.type = type;
+	}
+
 	public static enum MediaType {
 		Error,
 		Book

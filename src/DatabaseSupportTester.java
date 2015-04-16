@@ -16,7 +16,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 
-
 public class DatabaseSupportTester {
 	
 	private static String url;
@@ -37,8 +36,6 @@ public class DatabaseSupportTester {
 		user = dbcreds.get(1);
 		password = dbcreds.get(2);
 
-		printCheckoutCardTable();
-
 		DatabaseSupport ds = new DatabaseSupport(url, user, password);
 
 		Scanner scan = new Scanner(System.in);
@@ -47,13 +44,17 @@ public class DatabaseSupportTester {
 		System.out.println("  'p' (put book),");
 		System.out.println("  'g' (get book),");
 		System.out.println("  'u' (update book),");
+		System.out.println("  'r' (remove book),");
 		System.out.println("  'a' (put checkoutcard),");
 		System.out.println("  't' (get media type)");
+		System.out.println("  'c' (put customer)");
+		System.out.println("  'q' (get customer)");
+		System.out.println("  's' (search books)");
 		System.out.print("Choice: ");
 		String cmd = scan.nextLine();
 		char cmdc = cmd.charAt(0);
 		
-		boolean success = false;
+		boolean success = true;
 		if(cmdc == 'p') {
 			System.out.println("Putting a new book into the database:");
 			System.out.print("Enter title: ");
@@ -126,6 +127,64 @@ public class DatabaseSupportTester {
 			if(type == Media.MediaType.Book) {
 				System.out.println("Book");
 				success = true;
+			}
+		}
+		else if(cmdc == 'c') {
+			System.out.println("Putting a customer:");
+			System.out.print("Enter customer name: ");
+			String name = scan.nextLine();
+			success = ds.putCustomer(new Customer(name));
+		}
+		else if(cmdc == 'q') {
+			System.out.println("Getting a customer:");
+			System.out.print("Enter customer id: ");
+			long id = scan.nextLong();
+			Customer c = ds.getCustomer(id);
+			if(c != null) {
+				System.out.println(c);
+				success = true;
+			}
+			else {
+				success = false;
+			}
+		}
+		else if(cmdc == 'r') {
+			System.out.println("Removing a book:");
+			System.out.print("Enter book id: ");
+			long id = scan.nextLong();
+			success = ds.removeMedia(id);
+		}
+		else if(cmdc == 's') {
+			System.out.println("Searching books:");
+			Book.BookField field = null;
+			System.out.println("  Possible fields:");
+			System.out.println("    't' (title)");
+			System.out.println("    'a' (author)");
+			System.out.println("    'p' (publisher)");
+			System.out.println("    'i' (isbn)");
+			System.out.print("  Enter field command: ");
+			String fcmd = scan.nextLine();
+			char fcmdc = fcmd.charAt(0);
+			if(fcmdc == 't')
+				field = Book.BookField.Title;
+			else if(fcmdc == 'a')
+				field = Book.BookField.Author;
+			else if(fcmdc == 'p')
+				field = Book.BookField.Publisher;
+			else if(fcmdc == 'i')
+				field = Book.BookField.ISBN;
+			else
+				success = false;
+
+			List<Book> results;
+			if(success) {
+				System.out.print("  Enter search string: ");
+				String search = scan.nextLine();
+				results = ds.searchBooks(field, search);
+				if(results != null)
+					System.out.println(results);
+				else
+					success = false;
 			}
 		}
 		if(success) {

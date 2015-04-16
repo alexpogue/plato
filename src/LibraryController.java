@@ -14,8 +14,8 @@ public class LibraryController implements ILibraryController {
 	}
 
 	@Override
-	public boolean deleteBook(Media m) {
-		return library.deleteBook(m);
+	public boolean deleteBook(long mid) {
+		return library.deleteBook(mid);
 	}
 
 	@Override

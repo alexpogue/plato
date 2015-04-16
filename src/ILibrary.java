@@ -2,7 +2,7 @@ import java.util.List;
 
 public interface ILibrary {
 	boolean addBook(String T);
-	boolean deleteBook(Media m);
+	boolean deleteBook(long mid);
 	boolean addCustomer(String Name);
 	boolean removeCustomer(long cid);
 	boolean editCustomerName(long cid, String newName);

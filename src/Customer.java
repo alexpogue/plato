@@ -1,19 +1,22 @@
 
 public class Customer implements ICustomer{
-
-	private long customerId = -1;
+	private long id;
 	private String name;
-	private float balance = 0.00f;
+
+	public Customer()
+	{
+		id = -1;
+		name = "";
+	}
 	
 	public Customer(String name)
 	{
 		this.name = name;
 	}
 
-	public Customer(long cid, String name, float balanceOwed) {
-		this.customerId = cid;
+	public Customer(long cid, String name) {
+		this.id = cid;
 		this.name = name;
-		this.balance = balanceOwed;
 	}
 	
 	public String getName()
@@ -26,19 +29,18 @@ public class Customer implements ICustomer{
 		this.name = name;
 	}
 	
-	public float getBalanceOwed()
-	{
-		return balance;
-	}
-	
-	public void setBalance(float newBalance)
-	{
-		this.balance = newBalance;
-	}
-	
 	public long getId()
 	{
-		return customerId;
+		return id;
+	}
+	
+	public void setId(long cid)
+	{
+		id = cid;
+	}
+	
+	public String toString() {
+		return "Customer: id = " + id + ", name = " + name;
 	}
 	
 }

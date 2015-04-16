@@ -28,7 +28,6 @@ public class Book extends Media implements IBook {
 
 	public Book(long id, String title)
 	{
-		//TODO generate long id in library
 		super(id, MediaType.Book);
 		this.title = title;
 	}
@@ -65,6 +64,10 @@ public class Book extends Media implements IBook {
 		this.isbn = isbn;
 	}
 	
+	public String toString() {
+		return "Book: title = " + title + ", author = " + author + ", publisher = " + publisher + ", isbn = " + isbn;
+	}
+
 	public static enum BookField {
 		Title, Author, Publisher, ISBN
 	}

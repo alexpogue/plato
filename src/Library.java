@@ -39,8 +39,8 @@ public class Library implements ILibrary{
 	}
 
 	@Override
-	public boolean deleteBook(Media m) {
-		return databaseSupport.removeMedia(m);
+	public boolean deleteBook(long mid) {
+		return databaseSupport.removeMedia(mid);
 	}
 
 	@Override
@@ -195,7 +195,7 @@ public class Library implements ILibrary{
 
 	@Override
 	public List<Book> searchBooks(Book.BookField field, String searchString) {
-		return databaseSupport.SearchBooks(field, searchString);
+		return databaseSupport.searchBooks(field, searchString);
 	}
 
 	@Override
@@ -209,7 +209,6 @@ public class Library implements ILibrary{
 	public void viewBook(long bid, IBookDisplay bd) {
 		Book b = (Book)databaseSupport.getMedia(bid);
 		bd.display(b);
-		
 	}
 
 	@Override

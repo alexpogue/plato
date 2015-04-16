@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<entity-mappings xmlns="http://java.sun.com/xml/ns/persistence/orm"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/persistence/orm http://java.sun.com/xml/ns/persistence/orm_1_0.xsd"
+    version="1.0">
+    <entity class="Customer" name="Customer">
+        <table name="customer"/>
+        <attributes>
+            <id name="id">
+                <generated-value strategy="IDENTITY"/>
+            </id>
+        </attributes>
+    </entity>
+    <entity name="Media" class="Media">
+        <table name="media"/>
+        <inheritance strategy="JOINED" />
+        <discriminator-column name="mediatype"/>
+        <attributes>
+            <id name="id">
+                <generated-value strategy="IDENTITY"/>
+            </id>
+        </attributes>
+    </entity>
+    <entity class="Book" name="Book">
+        <table name="book"/>
+        <discriminator-value>book</discriminator-value>
+   </entity>
+   
+</entity-mappings>

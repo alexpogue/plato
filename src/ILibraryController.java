@@ -2,7 +2,7 @@ import java.util.List;
 
 public interface ILibraryController {
 	boolean addBook(String T);
-	boolean deleteBook(Media m);
+	boolean deleteBook(long mid);
 	boolean addCustomer(String name);
 	boolean removeCustomer(long cid);
 	boolean checkOutMedia(long cid, long mid);
