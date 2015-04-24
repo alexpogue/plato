@@ -1,4 +1,8 @@
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
 
+@Entity
+@DiscriminatorValue("book")
 public class Book extends Media implements IBook {
 	private String title;
 	private String author;
