@@ -155,8 +155,7 @@ public class Library implements ILibrary{
 
 	@Override
 	public List<Book> searchBooks(Book.BookField field, String searchString) {
-		// TODO Auto-generated method stub
-		return null;
+		return databaseSupport.SearchBooks(field, searchString);
 	}
 
 	@Override
