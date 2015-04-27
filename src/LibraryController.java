@@ -85,5 +85,45 @@ public class LibraryController implements ILibraryController {
 		library.logout(u);
 		return;
 	}
+//Iteration 3
+	@Override
+	public boolean deleteMovie(long mid) {
+		return library.deleteMovie(mid);
+	}
+
+	@Override
+	public boolean addMovie(String t) {
+		return library.addMovie(t);
+	}
+
+	@Override
+	public boolean editMovieTitle(long mid, String newValue) {
+		return library.editMovieTitle(mid, newValue);
+	}
+
+	@Override
+	public boolean editMovieGenre(long mid, String newValue) {
+		return library.editMovieGenre(mid, newValue);
+	}
+
+	@Override
+	public boolean deleteCD(long cid) {
+		return library.deleteCD(cid);
+	}
+
+	@Override
+	public boolean addCD(String t) {
+		return library.addCD(t);
+	}
+
+	@Override
+	public boolean editCDTitle(long cid, String newValue) {
+		return library.editCDTitle(cid, newValue);
+	}
+
+	@Override
+	public boolean editCDGenre(long cid, String newValue) {
+		return library.editCDGenre(cid, newValue);
+	}
 
 }

@@ -24,4 +24,14 @@ public interface ILibrary {
 	//This may be a bit strange, but our application tracks who is currently logged in.
 	IUser.UserType login(String uid, String pass);
 	void logout(User u);
+	
+	//Iteration 3
+	boolean deleteMovie(long mid);
+	boolean addMovie(String t);
+	boolean editMovieTitle(long mid, String newValue);
+	boolean editMovieGenre(long mid, String newValue);
+	boolean deleteCD(long cid);
+	boolean addCD(String t);
+	boolean editCDTitle(long cid, String newValue);
+	boolean editCDGenre(long cid, String newValue);
 }

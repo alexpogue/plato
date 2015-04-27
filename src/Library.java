@@ -257,5 +257,53 @@ public class Library implements ILibrary{
 		
 		return;
 	}
+//Iteration 3
+	
+	@Override
+	public boolean deleteMovie(long mid) {
+		return databaseSupport.removeMedia(mid);
+	}
+
+	@Override
+	public boolean addMovie(String t) {
+		Movie m= new Movie();
+		m.setTitle(T);
+		return databaseSupport.putMedia(m);
+	}
+
+	@Override
+	public boolean editMovieTitle(long mid, String newValue) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean editMovieGenre(long mid, String newValue) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean deleteCD(long cid) {
+		return databaseSupport.removeMedia(cid);
+	}
+
+	@Override
+	public boolean addCD(String t) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean editCDTitle(long cid, String newValue) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean editCDGenre(long cid, String newValue) {
+		// TODO Auto-generated method stub
+		return false;
+	}
 	
 }
