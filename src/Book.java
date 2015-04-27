@@ -1,4 +1,8 @@
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
 
+@Entity
+@DiscriminatorValue("book")
 public class Book extends Media implements IBook {
 	private String title;
 	private String author;
@@ -28,7 +32,6 @@ public class Book extends Media implements IBook {
 
 	public Book(long id, String title)
 	{
-		//TODO generate long id in library
 		super(id, MediaType.Book);
 		this.title = title;
 	}
@@ -65,6 +68,10 @@ public class Book extends Media implements IBook {
 		this.isbn = isbn;
 	}
 	
+	public String toString() {
+		return "Book: title = " + title + ", author = " + author + ", publisher = " + publisher + ", isbn = " + isbn;
+	}
+
 	public static enum BookField {
 		title, author, publisher, isbn
 	}

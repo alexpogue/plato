@@ -4,7 +4,11 @@ public interface IErrorContainer {
 		ErrorCode getError();
 		
 		public static enum ErrorCode {
-			//TODO: Define the enumeration
+			Success,
+			MediaNotFound,
+			MediaNotCheckedOut,
+			LatePolicyNotFound,
+			BadAmount
 		}
 }
 

@@ -1,86 +1,120 @@
 import java.util.Date;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
-public class CheckoutCard {
-	private long cardId;
-	private long customerId;
-	private long mediaId;
-	private Date checkedOut;
-	private Date checkedIn;
-	
-	public CheckoutCard(long cardId, long customerId, long mediaId) {
-		this.cardId = cardId;
-		this.customerId = customerId;
-		this.mediaId = mediaId;
+@Entity
+public class CheckoutCard implements ICheckoutCard{
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	private long id;
+
+	@ManyToOne(cascade=CascadeType.ALL)
+	@JoinColumn(name="customerId")
+	private Customer customer;
+
+	@ManyToOne(cascade=CascadeType.ALL)
+	@JoinColumn(name="mediaId")
+	private Media media;
+
+	private Date checkOutDate;
+	private Date checkInDate;
+	private float lateFeeAmountPaid;
+
+	public CheckoutCard() {
+		init(-1, null, null, null, null);
 	}
-	
-	public CheckoutCard(long customerId, long mediaId) {
-		init(-1, customerId, mediaId, new Date(), null);
+
+	public CheckoutCard(long cardId, Customer customer, Media media) {
+		this.id = cardId;
+		this.customer = customer;
+		this.media = media;
 	}
-	
-	public CheckoutCard(long customerId, long mediaId, Date checkedOut)
+
+	public CheckoutCard(Customer customer, Media media) {
+		init(-1, customer, media, new Date(), null);
+	}
+
+	public CheckoutCard(Customer customer, Media media, Date checkedOut)
 	{
-		init(-1, customerId, mediaId, checkedOut, null);
+		init(-1, customer, media, checkedOut, null);
 	}
 
-	public CheckoutCard(long customerId, long mediaId, Date checkedOut, Date checkedIn)
+	public CheckoutCard(Customer customer, Media media, Date checkedOut, Date checkedIn)
 	{
-		init(-1, customerId, mediaId, checkedOut, checkedIn);
+		init(-1, customer, media, checkedOut, checkedIn);
 	}
 
-	public CheckoutCard(long cardId, long customerId, long mediaId, Date checkedOut, Date checkedIn) {
-		init(cardId, customerId, mediaId, checkedOut, checkedIn);
+	public CheckoutCard(long cardId, Customer customer, Media media, Date checkedOut, Date checkedIn) {
+		init(cardId, customer, media, checkedOut, checkedIn);
 	}
 
-	private void init(long id, long cid, long mid, Date out, Date in) {
-		cardId = id;
-		customerId = cid;
-		mediaId = mid;
-		checkedOut = out;
-		checkedIn = in;
+	private void init(long id, Customer c, Media m, Date out, Date in) {
+		this.id = id;
+		this.customer = c;
+		this.media = m;
+		this.checkOutDate = out;
+		this.checkInDate = in;
 	}
 
 	public long getId() {
-		return cardId;
+		return id;
 	}
 
 	public void setId(long id) {
-		cardId = id;
-	}
-	
-	public long getCustomerId() {
-		return customerId;
+		this.id = id;
 	}
 
-	public void setCustomerId(long customerId) {
-		this.customerId = customerId;
-	}
-	
-	public long getMediaId() {
-		return mediaId;
+	public Customer getCustomer() {
+		return customer;
 	}
 
-	public void setMediaId(long mediaId) {
-		this.mediaId = mediaId;
+	public void setCustomer(Customer customer) {
+		this.customer = customer;
+	}
+
+	public Media getMedia() {
+		return media;
+	}
+
+	public void setMedia(Media media) {
+		this.media = media;
 	}
 
 	public Date getCheckOutDate() {
-		return checkedOut;
+		return checkOutDate;
 	}
-	
+
 	public void setCheckOutDate(Date checkOutDate) {
-		checkedOut = checkOutDate;
+		this.checkOutDate = checkOutDate;
 	}
 
 	public Date getCheckInDate() {
-		return checkedIn;
+		return checkInDate;
 	}
 
 	public void setCheckInDate(Date checkInDate) {
-		checkedIn = checkInDate;
+		this.checkInDate = checkInDate;
 	}
 
 	public boolean isCheckedOut() {
-		return checkedOut != null && checkedIn == null;
+		return checkOutDate != null && checkInDate == null;
+	}
+
+	public float getLateFeeAmountPaid() {
+		return lateFeeAmountPaid;
+	}
+
+	public void setLateFeeAmountPaid(float lateFeeAmountPaid) {
+		this.lateFeeAmountPaid = lateFeeAmountPaid;
+	}
+
+	public void payLateFee(float amount) {
+		lateFeeAmountPaid += amount;
 	}
 }

@@ -1,5 +1,6 @@
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 public class Library implements ILibrary{
 
@@ -39,8 +40,8 @@ public class Library implements ILibrary{
 	}
 
 	@Override
-	public boolean deleteBook(Media m) {
-		return databaseSupport.removeMedia(m);
+	public boolean deleteBook(long mid) {
+		return databaseSupport.removeMedia(mid);
 	}
 
 	@Override
@@ -64,30 +65,43 @@ public class Library implements ILibrary{
 
 	@Override
 	public boolean checkOutMedia(long cid, long mid) {
-		if(databaseSupport.getMedia(mid) == null) {
+		// TODO: redo interaction diagram
+		Media m = databaseSupport.getMedia(mid);
+		if(m == null) {
 			// TODO: communicate these specific errors to the outside world
 			return false;
 		}
-		if(databaseSupport.getCustomer(cid) == null) {
+		Customer c = databaseSupport.getCustomer(cid);
+		if(c == null) {
 			return false;
 		}
 
-		List<CheckoutCard> cards = databaseSupport.getCheckoutCardsForMedia(mid);
+		Set<CheckoutCard> cards = m.getCheckoutCards();
 		CheckoutCard recent = findMostRecentCard(cards);
 		if(recent.isCheckedOut()) {
 			return false;
 		}
-		CheckoutCard cc = new CheckoutCard(cid, mid);
-		return databaseSupport.putCheckoutCard(cc);
+		CheckoutCard cc = new CheckoutCard(c, m);
+		m.addCheckoutCard(cc);
+		c.addCheckoutCard(cc);
+		if(!databaseSupport.putMedia(m)) {
+			return false;
+		}
+		if(!databaseSupport.putCustomer(c)) {
+			return false;
+		}
+		return true;
 	}
 
 	@Override
 	public boolean checkInMedia(long mid) {
-		if(databaseSupport.getMedia(mid) == null) {
+		// TODO: redo interaction diagram
+		Media m = databaseSupport.getMedia(mid);
+		if(m == null) {
 			// media with specified id does not exist
 			return false;
 		}
-		List<CheckoutCard> cards = databaseSupport.getCheckoutCardsForMedia(mid);
+		Set<CheckoutCard> cards = m.getCheckoutCards();
 		// TODO: validate this checkout card's fields
 		CheckoutCard cc = findMostRecentCard(cards);
 		if(cc == null) {
@@ -98,8 +112,8 @@ public class Library implements ILibrary{
 			// media is not checked out
 			return false;
 		}
-		long cid = cc.getCustomerId();
-		if(databaseSupport.getCustomer(cid) == null) {
+		Customer c = cc.getCustomer();
+		if(c == null) {
 			// customer is not in the system
 			return false;
 		}
@@ -107,8 +121,9 @@ public class Library implements ILibrary{
 		return databaseSupport.putCheckoutCard(cc);
 	}
 
-	private CheckoutCard findMostRecentCard(List<CheckoutCard> cards) {
-		CheckoutCard mostRecent = cards.get(0);
+	private CheckoutCard findMostRecentCard(Set<CheckoutCard> cards) {
+		// start with any element of cards
+		CheckoutCard mostRecent = cards.iterator().next();
 		for(CheckoutCard card : cards) {
 			if(card.getCheckOutDate() == null) {
 				continue;
@@ -131,25 +146,65 @@ public class Library implements ILibrary{
 	}
 	
 	//START ITERATION 2 HERE!
-	/*
-	 * TODO Know more when ErrorContainer is done
-	 * @see ILibrary#isMediaCheckedOut(long, ErrorContainer)
-	 */
+
 	public boolean isMediaCheckedOut(long mid, ErrorContainer err){
-		return false;
+		Media m = databaseSupport.getMedia(mid);
+		if(m == null) {
+			err.setError(IErrorContainer.ErrorCode.MediaNotFound);
+			return false;
+		}
+		CheckoutCard cc = databaseSupport.getMostRecentCheckoutCardForMedia(mid);
+		boolean b = cc.isCheckedOut();
+		err.setError(IErrorContainer.ErrorCode.Success);
+		return b;
 	}
-	/*
-	 * TODO
-	 */
+
 	public float calculateMediaLateFee(long mid, ErrorContainer err){
-		return 0;
+		Media.MediaType mt = databaseSupport.getMediaType(mid);
+		if(mt == Media.MediaType.Error) {
+			// couldn't find the media
+			err.setError(IErrorContainer.ErrorCode.MediaNotFound);
+			return -1.0f;
+		}
+		CheckoutCard cc = databaseSupport.getMostRecentCheckoutCardForMedia(mid);
+		boolean checkedOut = cc.isCheckedOut();
+		if(cc == null || !checkedOut) {
+			err.setError(IErrorContainer.ErrorCode.MediaNotCheckedOut);
+			return -1.0f;
+		}
+		LatePolicy lp = databaseSupport.getLatePolicy();
+		if(lp == null) {
+			err.setError(IErrorContainer.ErrorCode.LatePolicyNotFound);
+			return -1.0f;
+		}
+		Float fee = (new LateFeeCalculator()).calculateMediaLateFee(mt, cc, lp);
+		err.setError(IErrorContainer.ErrorCode.Success);
+		return fee;
 	}
 	/*
 	 * TODO it will be fixed after ErrorContainer is done
 	 * @see ILibrary#payMediaLateFee(long, float)
 	 */
-	public Error payMediaLateFee(long mid, float amount){
-		//TODO: Write da code
+	public IErrorContainer.ErrorCode payMediaLateFee(long mid, float amount){
+		Media.MediaType mt = databaseSupport.getMediaType(mid);
+		if(mt == Media.MediaType.Error) {
+			return IErrorContainer.ErrorCode.MediaNotFound;
+		}
+		CheckoutCard cc = databaseSupport.getMostRecentCheckoutCardForMedia(mid);
+		boolean checkedOut = cc.isCheckedOut();
+		if(cc == null || !checkedOut) {
+			return IErrorContainer.ErrorCode.MediaNotCheckedOut;
+		}
+		LatePolicy lp = databaseSupport.getLatePolicy();
+		if(lp == null) {
+			return IErrorContainer.ErrorCode.LatePolicyNotFound;
+		}
+		boolean goodAmount = (new LateFeeCalculator()).amountIsAppropriate(mt, cc, lp, amount);
+		if(!goodAmount) {
+			return IErrorContainer.ErrorCode.BadAmount;
+		}
+		cc.payLateFee(amount);
+		databaseSupport.putCheckoutCard(cc);
 		return null;
 	}
 
@@ -169,7 +224,6 @@ public class Library implements ILibrary{
 	public void viewBook(long bid, IBookDisplay bd) {
 		Book b = (Book)databaseSupport.getMedia(bid);
 		bd.display(b);
-		
 	}
 
 	@Override
@@ -182,6 +236,9 @@ public class Library implements ILibrary{
 		else
 		{
 			User u = databaseSupport.getUser(uid);
+			if(u == null)
+				return null;
+	
 			IUser.UserType utype = u.validate(pass);
 			if(utype != null)
 			{
@@ -200,7 +257,5 @@ public class Library implements ILibrary{
 		
 		return;
 	}
-	
-	
 	
 }
