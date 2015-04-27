@@ -8,10 +8,8 @@ import javax.persistence.Persistence;
 import javax.persistence.Query;
 
 public class DatabaseSupport implements IDatabaseSupport {
-	private static final String CUSTOMERS_PERSISTENCE_UNIT_NAME = "customers";
-	private static final String BOOKS_PERSISTENCE_UNIT_NAME = "books";
-	private static EntityManagerFactory customerFactory;
-	private static EntityManagerFactory bookFactory;
+	private static final String PERSISTENCE_UNIT_NAME = "EclipseLink-JPA-Installation";
+	private static EntityManagerFactory entityManagerFactory;
 
 	public DatabaseSupport(String url, String user, String password) {
 		Map<String, String> properties = new HashMap<String, String>();
@@ -19,8 +17,7 @@ public class DatabaseSupport implements IDatabaseSupport {
 		properties.put("javax.persistence.jdbc.user", user);
 		properties.put("javax.persistence.jdbc.password", password);
 
-		customerFactory = Persistence.createEntityManagerFactory(CUSTOMERS_PERSISTENCE_UNIT_NAME, properties);
-		bookFactory = Persistence.createEntityManagerFactory(BOOKS_PERSISTENCE_UNIT_NAME, properties);
+		entityManagerFactory = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT_NAME, properties);
 	}
 	
 	public boolean putMedia(Media m) {
@@ -48,7 +45,7 @@ public class DatabaseSupport implements IDatabaseSupport {
 
 	private boolean putBook(Book b) {
 		try {
-			EntityManager em = bookFactory.createEntityManager();
+			EntityManager em = entityManagerFactory.createEntityManager();
 			em.getTransaction().begin();
 			em.persist(b);
 			em.getTransaction().commit();
@@ -75,7 +72,7 @@ public class DatabaseSupport implements IDatabaseSupport {
 	}
 
 	private boolean updateBook(Book b) {
-		EntityManager em = bookFactory.createEntityManager();
+		EntityManager em = entityManagerFactory.createEntityManager();
 		Book bookInDb = em.find(Book.class, b.getId());
 		if(bookInDb == null) {
 			return false;
@@ -91,7 +88,7 @@ public class DatabaseSupport implements IDatabaseSupport {
 	}
 
 	private Book getBook(long bid) {
-		EntityManager em = bookFactory.createEntityManager();
+		EntityManager em = entityManagerFactory.createEntityManager();
 		return em.find(Book.class, bid);
 	}
 
@@ -108,7 +105,7 @@ public class DatabaseSupport implements IDatabaseSupport {
 
 	private boolean removeBook(long bid) {
 		try {
-			EntityManager em = bookFactory.createEntityManager();
+			EntityManager em = entityManagerFactory.createEntityManager();
 			Book b = em.find(Book.class, bid);
 			em.getTransaction().begin();
 			em.remove(b);
@@ -123,7 +120,7 @@ public class DatabaseSupport implements IDatabaseSupport {
 	@Override
 	public boolean putCustomer(Customer c) {
 		try {
-			EntityManager em = customerFactory.createEntityManager();
+			EntityManager em = entityManagerFactory.createEntityManager();
 			em.getTransaction().begin();
 			em.persist(c);
 			em.getTransaction().commit();
@@ -137,7 +134,7 @@ public class DatabaseSupport implements IDatabaseSupport {
 
 	@Override
 	public Customer getCustomer(long cid) {
-		EntityManager em = customerFactory.createEntityManager();
+		EntityManager em = entityManagerFactory.createEntityManager();
 		return em.find(Customer.class, cid);
 	}
 
@@ -161,8 +158,17 @@ public class DatabaseSupport implements IDatabaseSupport {
 	}
 
 	private boolean putNewCheckoutCard(CheckoutCard cc) {
-		// TODO
-		return false;
+		try {
+			EntityManager em = entityManagerFactory.createEntityManager();
+			em.getTransaction().begin();
+			em.persist(cc);
+			em.getTransaction().commit();
+			em.close();
+		}
+		catch(Exception e) {
+			return false;
+		}
+		return true;
 	}
 	
 	private boolean updateOldCheckoutCard(CheckoutCard cc) {
@@ -215,7 +221,7 @@ public class DatabaseSupport implements IDatabaseSupport {
 
 	@Override
 	public List<Book> searchBooks(Book.BookField field, String searchString) {
-		EntityManager em = bookFactory.createEntityManager();
+		EntityManager em = entityManagerFactory.createEntityManager();
 
 		String fieldName;
 		switch(field)

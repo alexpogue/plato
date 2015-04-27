@@ -67,8 +67,13 @@ public class DatabaseSupportTester {
 			String isbn = scan.nextLine();
 
 			Media m = new Book(title, author, publisher, isbn);
-
 			success = ds.putMedia(m);
+			Customer c = ds.getCustomer(1);
+			
+			CheckoutCard card = new CheckoutCard(c, m);
+			m.addCheckoutCard(card);
+			c.addCheckoutCard(card);
+			success = ds.putCheckoutCard(card);
 			
 		}
 		else if(cmdc == 'u') {
@@ -112,9 +117,11 @@ public class DatabaseSupportTester {
 			System.out.println("Putting a new checkout card:");
 			System.out.print("Enter customer id: ");
 			int customerId = scan.nextInt();
+			Customer customer = ds.getCustomer(customerId);
 			System.out.print("Enter media id: ");
 			int mediaId = scan.nextInt();
-			success = ds.putCheckoutCard(new CheckoutCard(customerId, mediaId));
+			Media media = ds.getMedia(mediaId);
+			success = ds.putCheckoutCard(new CheckoutCard(customer, media));
 		}
 		else if(cmdc == 't') {
 			System.out.println("Getting the media type:");
