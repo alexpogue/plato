@@ -50,6 +50,7 @@ public class DatabaseSupportTester {
 		System.out.println("  'c' (put customer)");
 		System.out.println("  'q' (get customer)");
 		System.out.println("  's' (search books)");
+		System.out.println("  'o' (checkout book)");
 		System.out.print("Choice: ");
 		String cmd = scan.nextLine();
 		char cmdc = cmd.charAt(0);
@@ -68,12 +69,6 @@ public class DatabaseSupportTester {
 
 			Media m = new Book(title, author, publisher, isbn);
 			success = ds.putMedia(m);
-			Customer c = ds.getCustomer(1);
-			
-			CheckoutCard card = new CheckoutCard(c, m);
-			m.addCheckoutCard(card);
-			c.addCheckoutCard(card);
-			success = ds.putCheckoutCard(card);
 			
 		}
 		else if(cmdc == 'u') {
@@ -193,6 +188,20 @@ public class DatabaseSupportTester {
 				else
 					success = false;
 			}
+		}
+		else if(cmdc == 'o') {
+			System.out.println("Checking out media to customer:");
+			System.out.print(" Media id: ");
+			long mid = scan.nextLong();
+			System.out.print(" Customer id: ");
+			long cid = scan.nextLong();
+
+			Media media = ds.getMedia(mid);
+			Customer customer = ds.getCustomer(cid);
+			CheckoutCard card = new CheckoutCard();
+			card.setMedia(media);
+			card.setCustomer(customer);
+			success = ds.putCheckoutCard(card);
 		}
 		if(success) {
 			System.out.println("Success!");

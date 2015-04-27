@@ -159,9 +159,25 @@ public class DatabaseSupport implements IDatabaseSupport {
 
 	private boolean putNewCheckoutCard(CheckoutCard cc) {
 		try {
+			// Note: We do it this backward-seeming way because when we use the
+			// media and customer held in cc directly, media and customer will
+			// have duplicated rows in the database. Consider revisiting.
+
+			long mid = cc.getMedia().getId();
+			long cid = cc.getCustomer().getId();
+
 			EntityManager em = entityManagerFactory.createEntityManager();
+
+			Media media = em.find(Media.class, mid);
+			Customer customer = em.find(Customer.class, cid);
+
 			em.getTransaction().begin();
-			em.persist(cc);
+			CheckoutCard card = new CheckoutCard();
+			card.setMedia(media);
+			media.addCheckoutCard(card);
+			card.setCustomer(customer);
+			customer.addCheckoutCard(card);
+			em.persist(card);
 			em.getTransaction().commit();
 			em.close();
 		}
