@@ -210,7 +210,7 @@ public class Library implements ILibrary{
 
 	@Override
 	public List<Book> searchBooks(Book.BookField field, String searchString) {
-		return databaseSupport.SearchBooks(field, searchString);
+		return databaseSupport.searchBooks(field, searchString);
 	}
 
 	@Override

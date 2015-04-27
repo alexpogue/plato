@@ -73,7 +73,7 @@ public class Book extends Media implements IBook {
 	}
 
 	public static enum BookField {
-		title, author, publisher, isbn
+		Title, Author, Publisher, ISBN
 	}
 	
 }
