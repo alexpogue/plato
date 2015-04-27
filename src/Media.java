@@ -60,6 +60,8 @@ public abstract class Media implements IMedia {
 
 	public static enum MediaType {
 		Error,
-		Book
+		Book,
+		Movie,
+		CD
 	}
 }

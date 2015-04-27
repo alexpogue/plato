@@ -1,19 +1,19 @@
 
-public class Movie extends Media implements IMovie {
+public class CD extends Media implements ICD {
 	private String title;
 	private String genre;
 		
-	public Movie() {
-		super(-1, MediaType.Movie);
+	public CD() {
+		super(-1, MediaType.CD);
 	}
 
-	public Movie(String title, String genre) {
-		super(-1, MediaType.Movie);
+	public CD(String title, String genre) {
+		super(-1, MediaType.CD);
 		init(title, genre);
 	}
 
-	public Movie(long id, String title, String genre) {
-		super(id, MediaType.Movie);
+	public CD(long id, String title, String genre) {
+		super(id, MediaType.CD);
 		init(title, genre);
 	}
 
@@ -22,9 +22,9 @@ public class Movie extends Media implements IMovie {
 		this.genre = genre;
 	}
 
-	public Movie(long id, String title)
+	public CD(long id, String title)
 	{
-		super(id, MediaType.Movie);
+		super(id, MediaType.CD);
 		this.title = title;
 	}
 
@@ -46,7 +46,7 @@ public class Movie extends Media implements IMovie {
 
 	
 	public String toString() {
-		return "Movie: title = " + title + ", genre = " + genre;
+		return "CD: title = " + title + ", genre = " + genre;
 	}
 
 	public static enum BookField {
