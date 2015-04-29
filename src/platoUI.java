@@ -9,16 +9,17 @@ public class platoUI {
 	public static void main(String[] args) {
 		libControl = new LibraryController();
 		scanner = new Scanner(System.in);
+		utype = IUser.UserType.Admin;
 		
 		System.out.println("Welcome to PLATO!");
 		System.out.println("\nPlease log in: ('guest' if you are a visitor)\n");
 		
-		while(utype == null)
-		{
-			System.out.print("Username: ");
-			String username = scanner.next();
-			utype = authorizeUser(username);
-		}
+//		while(utype == null)
+//		{
+//			System.out.print("Username: ");
+//			String username = scanner.next();
+//			utype = authorizeUser(username);
+//		}
 		
 	   /*  This is written in this fashion, as:
 		*  - Admins have access to all commands (though regrettably, only a few exclusive ones)
@@ -26,6 +27,21 @@ public class platoUI {
 		*  - Customers the next (though they don't have much at all, which is regrettable, but fairly expected)
 		*  And since it's such that there aren't any commands hidden as one goes up the ladder this structure made the most sense
 		*/
+		int counter = 1;
+		
+		topMenu(utype);
+		
+	}
+
+	private static void customerMenu()
+	{
+		int counter = 1;
+		System.out.println(counter++ + ": Add Customer");
+		System.out.println(counter++ + ": Change Customer Name");
+	}
+	
+	private static void topMenu(IUser.UserType utype)
+	{
 		int counter = 1;
 		switch(utype)
 		{
@@ -35,17 +51,19 @@ public class platoUI {
 				System.out.println(counter++ + ": Delete Customer");
 			case Employee:
 				System.out.println("\nEmployee Commands:");
-				System.out.println(counter++ + ": ");
+				System.out.println(counter++ + ": Customer Menu");
+				System.out.println();
 				//TODO Options for the rest of the commands in the program as well as the count
 			case Customer:
 				System.out.println("\nCustomer Options:");
 				System.out.println(counter++ + ": View Book");
 				System.out.println(counter++ + ": Search Book");
-				
 				break;
 		}
+		String choice = scanner.next();
+		int convert = Integer.parseInt(choice);
 	}
-
+	
 	private static IUser.UserType authorizeUser(String username)
 	{
 		IUser.UserType usertype;
@@ -54,12 +72,12 @@ public class platoUI {
 			System.out.print("Password: ");
 			String password = scanner.next();
 			
-			try {
+//			try {
 				usertype = libControl.login(username, password); 
-			} catch(NullPointerException err) {
-				System.out.println("\nLogin information was incorrect. Please try again.\n");
-				return null;
-			}
+//			} catch(NullPointerException err) {
+//				System.out.println("\nLogin information was incorrect. Please try again.\n");
+//				return null;
+//			}
 			return usertype;
 		}
 		

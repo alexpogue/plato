@@ -66,7 +66,7 @@ public class User implements IUser {
 
 	@Override
 	public UserType validate(String pass) {
-		if(pass == this.pass)
+		if(pass.equals(this.pass))
 		{
 			return utype;
 		}
