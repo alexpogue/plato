@@ -17,5 +17,6 @@ public interface IDatabaseSupport {
 	CheckoutCard getMostRecentCheckoutCardForMedia(long mid);
 	List<Book> searchBooks(Book.BookField field,String searchString);
 	User getUser(String uid);
+	boolean putUser(User user);
 
 }

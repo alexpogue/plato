@@ -51,6 +51,8 @@ public class DatabaseSupportTester {
 		System.out.println("  'q' (get customer)");
 		System.out.println("  's' (search books)");
 		System.out.println("  'o' (checkout book)");
+		System.out.println("  'e' (put user)");
+		System.out.println("  'l' (get user)");
 		System.out.print("Choice: ");
 		String cmd = scan.nextLine();
 		char cmdc = cmd.charAt(0);
@@ -133,6 +135,7 @@ public class DatabaseSupportTester {
 		}
 		else if(cmdc == 'c') {
 			System.out.println("Putting a customer:");
+			success = true;
 			System.out.print("Enter customer name: ");
 			String name = scan.nextLine();
 			success = ds.putCustomer(new Customer(name));
@@ -202,6 +205,39 @@ public class DatabaseSupportTester {
 			card.setMedia(media);
 			card.setCustomer(customer);
 			success = ds.putCheckoutCard(card);
+		}
+		else if(cmdc == 'e') {
+			System.out.println("Putting user:");
+			System.out.print("Username: ");
+			String username = scan.nextLine();
+			System.out.print("Password: ");
+			String password = scan.nextLine();
+			System.out.print("User type (a = admin, e = employee, c = customer: ");
+			char uTypeC = scan.nextLine().charAt(0);
+			IUser.UserType uType = null;
+
+			if(uTypeC == 'a')
+				uType = IUser.UserType.Admin;
+			else if(uTypeC == 'e')
+				uType = IUser.UserType.Employee;
+			else if(uTypeC == 'c')
+				uType = IUser.UserType.Customer;
+
+			User user = new User(username, password, uType);
+			ds.putUser(user);
+		}
+		else if(cmdc == 'l') {
+			System.out.println("Getting user:");
+			System.out.print("Username: ");
+			String username = scan.nextLine();
+			User user = ds.getUser(username);
+			if(user != null) {
+				System.out.println(user);
+				success = true;
+			}
+			else {
+				success = false;
+			}
 		}
 		if(success) {
 			System.out.println("Success!");

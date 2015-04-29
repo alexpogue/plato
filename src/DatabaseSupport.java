@@ -219,14 +219,30 @@ public class DatabaseSupport implements IDatabaseSupport {
 	}
 
 	@Override
-	public User getUser(String uid) {
-			// TODO: User(id, pass, utype)
-//			String sql = 	"SELECT " +
-//							"Users.id AS id," +
-//							"Users.password AS pass," +
-//							"Users.usertype AS utype " +
-//							"FROM Users WHERE id ='" + uid + "'";
-		return null;
+	public User getUser(String username) {
+		// TODO: enforce one user per username.
+		EntityManager em = entityManagerFactory.createEntityManager();
+		Query q = em.createQuery("select u from User u where u.username = :username");
+		q.setParameter("username", username);
+		List<User> userList = q.getResultList();
+
+		// hopefully there's only one!
+		return userList.get(0);
+	}
+
+	@Override
+	public boolean putUser(User user) {
+		try {
+			EntityManager em = entityManagerFactory.createEntityManager();
+			em.getTransaction().begin();
+			em.persist(user);
+			em.getTransaction().commit();
+			em.close();
+		}
+		catch(Exception e) {
+			return false;
+		}
+		return true;
 	}
 
 	@Override

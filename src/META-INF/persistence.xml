@@ -8,6 +8,7 @@
     <class>Book</class>
     <class>Customer</class>
     <class>CheckoutCard</class>
+    <class>User</class>
     <properties>
       <property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver" />
 
