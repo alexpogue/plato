@@ -6,7 +6,6 @@ public class platoUI {
 	private static Scanner scanner;
 	private static LibraryController libControl;
 	
-	//TODO Determine this number
 	private static final int numCustomerOptions = 5;
 	private static final int numEmployeeOptions = 5;
 	private static final int numAdminOptions = 1;
@@ -228,7 +227,7 @@ public class platoUI {
 				
 			//View media status
 			case 3:
-			viewMediaStatus();
+				viewMediaStatus();
 				break;
 				
 				
@@ -314,6 +313,7 @@ public class platoUI {
 		}
 		
 		String title;
+		long mid = -1;
 		switch(selection)
 		{
 			//Add book
@@ -325,22 +325,43 @@ public class platoUI {
 				
 			//Delete book
 			case 2:
-			deleteBook();
+				deleteMedia(Media.MediaType.Book);
 				break;
 				
 			//Edit book title
 			case 3:
-				//TODO Resolve issue: none of these methods exist
+				editMediaTitle(Media.MediaType.Book);
 				break;
 				
 			//Edit book author
 			case 4:
-				//TODO Resolve issue: none of these methods exist
+				mid = -1;
+				while(mid == -1)
+				{
+					System.out.print("\nEnter media id of Book to be edited: ");
+					mid = handleID();
+				}
+				
+				System.out.println("Enter new Author: ");
+				String author = scanner.next();
+				
+				opSuccess(libControl.editBookAuthor(mid, author));
 				break;
 				
 			//Edit book publisher
 			case 5:
-				//TODO Resolve issue: none of these methods exist
+				mid = -1;
+				while(mid == -1)
+				{
+					System.out.print("\nEnter media id of Book to be edited: ");
+					mid = handleID();
+				}
+				
+				System.out.println("Enter new Publisher of book: ");
+				String pub = scanner.next();
+				
+				opSuccess(libControl.editBookPublisher(mid, pub));
+				
 				break;
 				
 			//Main menu
@@ -365,22 +386,29 @@ public class platoUI {
 			selection = acknowledgeSelection(5);
 		}
 		
+		String title;
 		switch(selection)
 		{
+			//Add movie
 			case 1:
-				
+				System.out.println("Enter title of movie to be added: ");
+				title = scanner.next();
+				opSuccess(libControl.addMovie(title));
 				break;
 				
+			//Delete movie
 			case 2:
-				
+				deleteMedia(Media.MediaType.Movie);
 				break;
 				
+			//Edit movie title
 			case 3:
-				
+				editMediaTitle(Media.MediaType.Movie);
 				break;
 				
+			//Edit movie genre
 			case 4:
-				
+				editMediaGenre(Media.MediaType.Movie);
 				break;
 
 			//Main menu
@@ -405,22 +433,29 @@ public class platoUI {
 			selection = acknowledgeSelection(5);
 		}
 		
+		String title;
 		switch(selection)
 		{
+			//Add CD
 			case 1:
-				
+				System.out.println("Enter title of CD to be added: ");
+				title = scanner.next();
+				opSuccess(libControl.addCD(title));
 				break;
 				
+			//Delete CD
 			case 2:
-				
+				deleteMedia(Media.MediaType.CD);
 				break;
 				
+			//Edit CD title
 			case 3:
-				
+				editMediaTitle(Media.MediaType.CD);
 				break;
 				
+			//Edit CD genre
 			case 4:
-				
+				editMediaGenre(Media.MediaType.CD);
 				break;
 
 			//Main menu
@@ -508,8 +543,11 @@ public class platoUI {
 	{
 		if(b)
 			System.out.println("Operation success.");
+		if(!b)
+			System.out.println("Operation failure.");
 	}
 	
+	@SuppressWarnings("incomplete-switch")
 	private static void viewMediaStatus() {
 		long mid;
 		ErrorContainer err = new ErrorContainer();
@@ -532,13 +570,68 @@ public class platoUI {
 		}
 	}
 	
-	private static void deleteBook() {
-		long bid;
-		bid = -1;
-		while(bid == -1)
+	@SuppressWarnings("incomplete-switch")
+	private static void editMediaTitle(Media.MediaType mtype) {
+		String title;
+		long mid;
+		mid = -1;
+		while(mid == -1)
 		{
-			System.out.print("Enter Book id to be deleted: ");
-			bid = handleID();
+			System.out.print("\nEnter media id of item to be edited: ");
+			mid = handleID();
+		}
+		
+		System.out.println("Enter new Title: ");
+		title = scanner.next();
+		
+		switch(mtype)
+		{
+			case Book:
+				opSuccess(libControl.editBookTitle(mid, title));
+				break;
+			case Movie:
+				opSuccess(libControl.editMovieTitle(mid, title));
+				break;
+			case CD:
+				opSuccess(libControl.editCDTitle(mid, title));
+				break;
+		}
+		
+	}
+	
+	@SuppressWarnings("incomplete-switch")
+	private static void editMediaGenre(Media.MediaType mtype) {
+		long mid;
+		mid = -1;
+		while(mid == -1)
+		{
+			System.out.print("\nEnter media id of item to be edited: ");
+			mid = handleID();
+		}
+		
+		System.out.println("Enter new Genre: ");
+		String genre = scanner.next();
+		
+		switch(mtype)
+		{
+			case Movie:
+				opSuccess(libControl.editMovieGenre(mid, genre));
+				break;
+			case CD:
+				opSuccess(libControl.editCDGenre(mid, genre));
+				break;	
+		}
+	}
+	
+	@SuppressWarnings("incomplete-switch")
+	private static void deleteMedia(Media.MediaType mtype) 
+	{
+		long mid;
+		mid = -1;
+		while(mid == -1)
+		{
+			System.out.print("Enter media id of item to be deleted: ");
+			mid = handleID();
 		}
 		System.out.println("Are you sure? This operation cannot be undone. (Y/N): ");
 		String decision = scanner.next();
@@ -546,7 +639,18 @@ public class platoUI {
 		
 		if(decision.equals("yes") || decision.equals("y"))
 		{
-			opSuccess(libControl.deleteBook(bid));
+			switch(mtype)
+			{
+				case Book:
+					opSuccess(libControl.deleteBook(mid));
+					break;
+				case Movie:
+					opSuccess(libControl.deleteMovie(mid));
+					break;
+				case CD:
+					opSuccess(libControl.deleteCD(mid));
+					break;
+			}
 		}
 	}
 	
@@ -613,26 +717,26 @@ public class platoUI {
 
 	private static void viewCustomer(long cid)
 	{
-		
+		//TODO Implement me!
 	}
 
 	private static void viewBook(long bid)
 	{
-		
+		//TODO Implement me!
 	}
 	
 	private static void viewBook(Book b)
 	{
-		
+		//TODO Implement me!
 	}
 
 	private static void viewMovie(long mid)
 	{
-		
+		//TODO Implement me!
 	}
 
 	private static void viewCD(long cdid)
 	{
-		
+		//TODO Implement me!
 	}
 }
