@@ -119,6 +119,15 @@ public class DatabaseSupport implements IDatabaseSupport {
 	
 	@Override
 	public boolean putCustomer(Customer c) {
+		if(c.getId() < 0) {
+			return putNewCustomer(c);
+		}
+		else {
+			return updateOldCustomer(c);
+		}
+	}
+
+	private boolean putNewCustomer(Customer c) {
 		try {
 			EntityManager em = entityManagerFactory.createEntityManager();
 			em.getTransaction().begin();
@@ -132,6 +141,18 @@ public class DatabaseSupport implements IDatabaseSupport {
 		return true;
 	}
 
+	private boolean updateOldCustomer(Customer c) {
+		EntityManager em = entityManagerFactory.createEntityManager();
+		Customer customerInDb = em.find(Customer.class, c.getId());
+		if(customerInDb == null) {
+			return false;
+		}
+		em.getTransaction().begin();
+		customerInDb.setName(c.getName());
+		em.getTransaction().commit();
+		return true;
+	}
+
 	@Override
 	public Customer getCustomer(long cid) {
 		EntityManager em = entityManagerFactory.createEntityManager();
@@ -140,8 +161,17 @@ public class DatabaseSupport implements IDatabaseSupport {
 
 	@Override
 	public boolean removeCustomer(long cid) {
-		// TODO
-		return false;
+		try {
+			EntityManager em = entityManagerFactory.createEntityManager();
+			Customer c = em.find(Customer.class, cid);
+			em.getTransaction().begin();
+			em.remove(c);
+			em.getTransaction().commit();
+			return true;
+		}
+		catch(Exception e) {
+			return false;
+		}
 	}
 
 	@Override

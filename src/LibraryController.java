@@ -24,6 +24,11 @@ public class LibraryController implements ILibraryController {
 	}
 
 	@Override
+	public boolean editCustomerName(long cid, String newName) {
+		return library.editCustomerName(cid, newName);
+	}
+
+	@Override
 	public boolean removeCustomer(long cid) {
 		return library.removeCustomer(cid);
 	}

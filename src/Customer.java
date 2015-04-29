@@ -26,6 +26,7 @@ public class Customer implements ICustomer{
 
 	public Customer(String name)
 	{
+		this.id = -1;
 		this.name = name;
 	}
 

@@ -5,6 +5,7 @@ public interface ILibraryController {
 	boolean deleteBook(long mid);
 	boolean addCustomer(String name);
 	boolean removeCustomer(long cid);
+	boolean editCustomerName(long cid, String newName);
 	boolean checkOutMedia(long cid, long mid);
 	boolean checkInMedia(long mid);
 	boolean setLatePolicy(int daysUntilLate, float costPerDay);

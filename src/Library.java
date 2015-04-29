@@ -71,18 +71,19 @@ public class Library implements ILibrary{
 		Customer customer = new Customer(name);
 		return databaseSupport.putCustomer(customer);
 	}
-
-	@Override
-	public boolean removeCustomer(long cid) {
-		return databaseSupport.removeCustomer(cid);
-	}
 	
+	@Override
 	public boolean editCustomerName(long cid, String newName)
 	{
 		Customer customer = databaseSupport.getCustomer(cid);
 		customer.setName(newName);
 
 		return databaseSupport.putCustomer(customer);
+	}
+
+	@Override
+	public boolean removeCustomer(long cid) {
+		return databaseSupport.removeCustomer(cid);
 	}
 
 	@Override
