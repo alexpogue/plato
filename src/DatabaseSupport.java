@@ -206,6 +206,8 @@ public class DatabaseSupport implements IDatabaseSupport {
 			card.setMedia(media);
 			media.addCheckoutCard(card);
 			card.setCustomer(customer);
+			card.setCheckOutDate(cc.getCheckOutDate());
+			card.setCheckInDate(cc.getCheckInDate());
 			customer.addCheckoutCard(card);
 			em.persist(card);
 			em.getTransaction().commit();

@@ -101,18 +101,12 @@ public class Library implements ILibrary{
 
 		Set<CheckoutCard> cards = m.getCheckoutCards();
 		CheckoutCard recent = findMostRecentCard(cards);
-		if(recent.isCheckedOut()) {
+		if(recent != null && recent.isCheckedOut()) {
 			return false;
 		}
 		CheckoutCard cc = new CheckoutCard(c, m);
-		m.addCheckoutCard(cc);
-		c.addCheckoutCard(cc);
-		if(!databaseSupport.putMedia(m)) {
-			return false;
-		}
-		if(!databaseSupport.putCustomer(c)) {
-			return false;
-		}
+		cc.setCheckOutDate(new Date());
+		databaseSupport.putCheckoutCard(cc);
 		return true;
 	}
 
@@ -146,6 +140,9 @@ public class Library implements ILibrary{
 
 	private CheckoutCard findMostRecentCard(Set<CheckoutCard> cards) {
 		// start with any element of cards
+		if(cards.isEmpty()) {
+			return null;
+		}
 		CheckoutCard mostRecent = cards.iterator().next();
 		for(CheckoutCard card : cards) {
 			if(card.getCheckOutDate() == null) {
