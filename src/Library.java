@@ -1,3 +1,9 @@
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -7,6 +13,22 @@ public class Library implements ILibrary{
 	private IDatabaseSupport databaseSupport;
 	private IUser loggedIn;
 	
+	public Library() {
+		List<String> dbcreds = new ArrayList<String>();DatabaseSupport
+		Path path = Paths.get("dbcreds.txt");
+		try {
+			dbcreds = Files.readAllLines(path, StandardCharsets.UTF_8);
+		} catch (IOException e) {
+			System.out.println(e.getMessage());
+			return;
+		}
+		String url = dbcreds.get(0);
+		String user = dbcreds.get(1);
+		String password = dbcreds.get(2);
+
+		databaseSupport = new DatabaseSupport(url, user, password);
+	}
+
 	public String editTitle(String s){
 		return "";
 	}
@@ -82,7 +104,7 @@ public class Library implements ILibrary{
 			return false;
 		}
 		CheckoutCard cc = new CheckoutCard(c, m);
-		m.addCheckoutCard(cc);
+		m.addCheckoutCard(cc);DatabaseSupport
 		c.addCheckoutCard(cc);
 		if(!databaseSupport.putMedia(m)) {
 			return false;
