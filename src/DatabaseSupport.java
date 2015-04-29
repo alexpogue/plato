@@ -221,7 +221,25 @@ public class DatabaseSupport implements IDatabaseSupport {
 	
 	private boolean updateOldCheckoutCard(CheckoutCard cc) {
 		// TODO
-		return false;
+		long mid = cc.getMedia().getId();
+		long cid = cc.getCustomer().getId();
+
+		EntityManager em = entityManagerFactory.createEntityManager();
+
+		Media media = em.find(Media.class, mid);
+		Customer customer = em.find(Customer.class, cid);
+
+		CheckoutCard ccInDb = em.find(CheckoutCard.class, cc.getId());
+		if(ccInDb == null) {
+			return false;
+		}
+		em.getTransaction().begin();
+		ccInDb.setMedia(media);
+		ccInDb.setCustomer(customer);
+		ccInDb.setCheckOutDate(cc.getCheckOutDate());
+		ccInDb.setCheckInDate(cc.getCheckInDate());
+		em.getTransaction().commit();
+		return true;
 	}
 
 	@Override
