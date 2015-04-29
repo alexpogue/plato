@@ -6,7 +6,7 @@ public class platoUI {
 	private static Scanner scanner;
 	private static LibraryController libControl;
 	
-	private static final int numCustomerOptions = 5;
+	private static final int numCustomerOptions = 6;
 	private static final int numEmployeeOptions = 5;
 	private static final int numAdminOptions = 1;
 
@@ -64,6 +64,7 @@ public class platoUI {
 				System.out.println(counter++ + ": View Book");
 				System.out.println(counter++ + ": View Movie");
 				System.out.println(counter++ + ": View CD");
+				System.out.println(counter++ + ": View Media Checked Out");
 				System.out.println(counter++ + ": Exit");
 				break;
 				
@@ -170,9 +171,21 @@ public class platoUI {
 				}
 				viewCD(cdid);
 				break;
+			
+			//View media checked out
+			case 11:
+//				long cid = -1;
+//				while(cid == -1)
+//				{
+//					System.out.println("\nEnter Customer id: ");
+//					cid = handleID();
+//				}
+				// TODO: Implement me!
+				// libControl.getMediaCheckedOut(cid);
+				break;
 				
 			//Exit	
-			case 11:
+			case 12:
 				exit = true;
 				break;
 		}
