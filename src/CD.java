@@ -49,8 +49,8 @@ public class CD extends Media implements ICD {
 		return "CD: title = " + title + ", genre = " + genre;
 	}
 
-	public static enum BookField {
-		Title, Author;
+	public static enum CdField {
+		Title, Genre;
 	}
 	
 }
