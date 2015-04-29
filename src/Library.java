@@ -14,7 +14,7 @@ public class Library implements ILibrary{
 	private IUser loggedIn;
 	
 	public Library() {
-		List<String> dbcreds = new ArrayList<String>();DatabaseSupport
+		List<String> dbcreds = new ArrayList<String>();
 		Path path = Paths.get("dbcreds.txt");
 		try {
 			dbcreds = Files.readAllLines(path, StandardCharsets.UTF_8);
