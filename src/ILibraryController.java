@@ -20,5 +20,15 @@ public interface ILibraryController {
 	//Library is going to handle logins
 	public IUser.UserType login(String uid, String pass);
 	public void logout(User u);
+	
+	//Iteration 3
+	boolean deleteMovie(long mid);
+	boolean addMovie(String t);
+	boolean editMovieTitle(long mid, String newValue);
+	boolean editMovieGenre(long mid, String newValue);
+	boolean deleteCD(long cid);
+	boolean addCD(String t);
+	boolean editCDTitle(long cid, String newValue);
+	boolean editCDGenre(long cid, String newValue);
 
 }

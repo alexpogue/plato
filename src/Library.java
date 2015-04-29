@@ -257,5 +257,62 @@ public class Library implements ILibrary{
 		
 		return;
 	}
+//Iteration 3
+	
+	@Override
+	public boolean deleteMovie(long mid) {
+		return databaseSupport.removeMedia(mid);
+	}
+
+	@Override
+	public boolean addMovie(String t) {
+		Movie m= new Movie();
+		m.setTitle(t);
+		return databaseSupport.putMedia(m);
+	}
+
+	@Override
+	public boolean editMovieTitle(long mid, String newValue) {
+		Media m = databaseSupport.getMedia(mid);
+		Movie movie = (Movie) m;
+		movie.setTitle(newValue);
+		return databaseSupport.putMedia(movie);
+	}
+
+	@Override
+	public boolean editMovieGenre(long mid, String newValue) {
+		Media m = databaseSupport.getMedia(mid);
+		Movie movie = (Movie) m;
+		movie.setTitle(newValue);
+		return databaseSupport.putMedia(movie);
+	}
+
+	@Override
+	public boolean deleteCD(long cid) {
+		return databaseSupport.removeMedia(cid);
+	}
+
+	@Override
+	public boolean addCD(String t) {
+		Movie m= new Movie();
+		m.setTitle(t);
+		return databaseSupport.putMedia(m);
+	}
+
+	@Override
+	public boolean editCDTitle(long cid, String newValue) {
+		Media m = databaseSupport.getMedia(cid);
+		CD cd = (CD) m;
+		cd.setTitle(newValue);
+		return databaseSupport.putMedia(cd);
+	}
+
+	@Override
+	public boolean editCDGenre(long cid, String newValue) {
+		Media m = databaseSupport.getMedia(cid);
+		CD cd = (CD) m;
+		cd.setTitle(newValue);
+		return databaseSupport.putMedia(cd);
+	}
 	
 }
