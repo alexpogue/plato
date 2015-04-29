@@ -9,6 +9,9 @@ public interface ILibraryController {
 	boolean checkOutMedia(long cid, long mid);
 	boolean checkInMedia(long mid);
 	boolean setLatePolicy(int daysUntilLate, float costPerDay);
+	boolean editBookTitle(long mid, String newTitle);
+	boolean editBookAuthor(long mid, String newAuthor);
+	boolean editBookPublisher(long mid, String newPublisher);
 	
 	//Iteration 2
 	void viewCustomer(long mid, ICustomerDisplay cd);

@@ -131,4 +131,19 @@ public class LibraryController implements ILibraryController {
 		return library.editCDGenre(cid, newValue);
 	}
 
+	@Override
+	public boolean editBookTitle(long mid, String newTitle) {
+		return library.editBookTitle(mid, newTitle);
+	}
+
+	@Override
+	public boolean editBookAuthor(long mid, String newAuthor) {
+		return library.editBookAuthor(mid, newAuthor);
+	}
+
+	@Override
+	public boolean editBookPublisher(long mid, String newPublisher) {
+		return library.editBookPublisher(mid, newPublisher);
+	}
+
 }

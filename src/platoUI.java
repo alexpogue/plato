@@ -1,3 +1,4 @@
+import java.util.List;
 import java.util.Scanner;
 
 public class platoUI {
@@ -30,11 +31,13 @@ public class platoUI {
 		while(!exit)
 		{
 			submenuExit = false;
-			mainMenu(utype);
+			mainMenu();
 		}
+		
+		scanner.close();
 	}
 
-	private static void mainMenu(IUser.UserType utype)
+	private static void mainMenu()
 	{
 		int counter = 1;
 		switch(utype)
@@ -90,11 +93,15 @@ public class platoUI {
 		if(isCustomer())
 			selection += numEmployeeOptions + numAdminOptions;
 		
+		handleMainMenuChoice(selection);
+	}
+
+	private static void handleMainMenuChoice(int selection) {
 		switch(selection)
 		{		
 			//Delete Customer
 			case 1:
-				
+				deleteCustomer();
 				break;
 				
 			//Media Menu
@@ -129,7 +136,7 @@ public class platoUI {
 				
 			//Search Book
 			case 7:
-				
+				searchBook();
 				break;
 				
 			//View Book
@@ -137,6 +144,7 @@ public class platoUI {
 				long bid = -1;
 				while(bid == -1)
 				{
+					System.out.print("\nEnter Book id: ");
 					bid = handleID();
 				}
 				viewBook(bid);
@@ -147,6 +155,7 @@ public class platoUI {
 				long mid = -1;
 				while(mid == -1)
 				{
+					System.out.print("\nEnter Movie id: ");
 					mid = handleID();
 				}
 				viewMovie(mid);
@@ -157,6 +166,7 @@ public class platoUI {
 				long cdid = -1;
 				while(cdid == -1)
 				{
+					System.out.print("\nEnter CD id: ");
 					cdid = handleID();
 				}
 				viewCD(cdid);
@@ -183,19 +193,44 @@ public class platoUI {
 			selection = acknowledgeSelection(4);
 		}
 		
+		long mid = -1;
 		switch(selection)
 		{
+			//Check in media
 			case 1:
-				
+				mid = -1;
+				while(mid == -1)
+				{
+					System.out.print("\nEnter Media id: ");
+					mid = handleID();
+				}
+				opSuccess(libControl.checkInMedia(mid));
 				break;
 				
+			//Check out media
 			case 2:
+				long cid = -1;
+				while(cid == -1)
+				{
+					System.out.print("\nEnter checking out Customer id: ");
+					cid = handleID();
+				}
 				
+				mid = -1;
+				while(mid == -1)
+				{
+					System.out.print("\nEnter Media id to be checked out: ");
+					mid = handleID();
+				}
+				
+				opSuccess(libControl.checkOutMedia(cid, mid));
 				break;
 				
+			//View media status
 			case 3:
-				
+			viewMediaStatus();
 				break;
+				
 				
 			//Main menu
 			case 4:
@@ -213,23 +248,46 @@ public class platoUI {
 		System.out.println(counter++ + ": Main Menu");
 		
 		int selection = -1;
+		String name;
 		while(selection == -1)
 		{
 			selection = acknowledgeSelection(4);
 		}
 		
+		long cid = -1;
 		switch(selection)
 		{
 			case 1:
+				System.out.println("\nEnter customer name to be added: ");
+				name = scanner.next();
 				
+				opSuccess(libControl.addCustomer(name));
 				break;
 				
 			case 2:
+				System.out.println("\nEnter id of customer to be changed: ");
+				cid = -1;
+				while(cid == -1)
+				{
+					System.out.print("\nEnter Customer id: ");
+					cid = handleID();
+				}
+				
+				System.out.println("\nEnter customer's new name: ");
+				name = scanner.next();
+				
+				opSuccess(libControl.editCustomerName(cid, name));
 				
 				break;
 				
 			case 3:
-				
+				cid = -1;
+				while(cid == -1)
+				{
+					System.out.print("\nEnter Customer id: ");
+					cid = handleID();
+				}
+				viewCustomer(cid);
 				break;
 				
 			//Main menu
@@ -255,26 +313,34 @@ public class platoUI {
 			selection = acknowledgeSelection(6);
 		}
 		
+		String title;
 		switch(selection)
 		{
+			//Add book
 			case 1:
-				
+				System.out.println("Enter title of book to be added: ");
+				title = scanner.next();
+				opSuccess(libControl.addBook(title));
 				break;
 				
+			//Delete book
 			case 2:
-				
+			deleteBook();
 				break;
 				
+			//Edit book title
 			case 3:
-				
+				//TODO Resolve issue: none of these methods exist
 				break;
 				
+			//Edit book author
 			case 4:
-				
+				//TODO Resolve issue: none of these methods exist
 				break;
 				
+			//Edit book publisher
 			case 5:
-				
+				//TODO Resolve issue: none of these methods exist
 				break;
 				
 			//Main menu
@@ -411,7 +477,7 @@ public class platoUI {
 	private static long handleID()
 	{
 		long id = -1;
-		System.out.print("Enter id: ");
+		
 		String selection = scanner.next();
 		try {
 		id = Long.parseLong(selection);
@@ -437,6 +503,113 @@ public class platoUI {
 	{
 		return utype == IUser.UserType.Customer;
 	}
+	
+	private static void opSuccess(boolean b)
+	{
+		if(b)
+			System.out.println("Operation success.");
+	}
+	
+	private static void viewMediaStatus() {
+		long mid;
+		ErrorContainer err = new ErrorContainer();
+		mid = -1;
+		while(mid == -1)
+		{
+			System.out.print("Enter Media id: ");
+			mid = handleID();
+		}
+		
+		boolean success = libControl.isMediaCheckedOut(mid, err);
+		switch(err.getError())
+		{
+			case Success:
+				opSuccess(success);
+				break;
+			case MediaNotFound:
+				System.out.println("Media not found.");
+				break;
+		}
+	}
+	
+	private static void deleteBook() {
+		long bid;
+		bid = -1;
+		while(bid == -1)
+		{
+			System.out.print("Enter Book id to be deleted: ");
+			bid = handleID();
+		}
+		System.out.println("Are you sure? This operation cannot be undone. (Y/N): ");
+		String decision = scanner.next();
+		decision = decision.toLowerCase();
+		
+		if(decision.equals("yes") || decision.equals("y"))
+		{
+			opSuccess(libControl.deleteBook(bid));
+		}
+	}
+	
+	private static void deleteCustomer() {
+		long cid = -1;
+		while(cid == -1)
+		{
+			System.out.print("Enter Customer id to be deleted: ");
+			cid = handleID();
+		}
+		System.out.println("Are you sure? This operation cannot be undone. (Y/N): ");
+		String decision = scanner.next();
+		decision = decision.toLowerCase();
+		
+		if(decision.equals("yes") || decision.equals("y"))
+		{
+			opSuccess(libControl.removeCustomer(cid));
+		}
+	}
+	
+	private static void searchBook() {
+		boolean fielded = false;
+		Book.BookField bookfield = null;
+		while(!fielded)
+		{
+			System.out.println("\nEnter a book field to search by (Title, Author, Publisher, ISBN): ");
+			
+			String field = scanner.next();
+			field = field.toLowerCase();
+			
+			switch(field)
+			{
+				case "title":
+					fielded = true;
+					bookfield = Book.BookField.Title;
+					break;
+				case "author":
+					fielded = true;
+					bookfield = Book.BookField.Author;
+					break;
+				case "publisher":
+					fielded = true;
+					bookfield = Book.BookField.Publisher;
+					break;
+				case "isbn":
+					fielded = true;
+					bookfield = Book.BookField.ISBN;
+					break;
+				default:
+					fielded = false;
+			}
+		}
+		
+		System.out.println("Enter a search string: ");
+		String searchString = scanner.next();
+		
+		List<Book> blist = libControl.searchBooks(bookfield, searchString);
+		
+		for(Book b : blist)
+		{
+			viewBook(b);
+		}
+	}
 
 	private static void viewCustomer(long cid)
 	{
@@ -444,6 +617,11 @@ public class platoUI {
 	}
 
 	private static void viewBook(long bid)
+	{
+		
+	}
+	
+	private static void viewBook(Book b)
 	{
 		
 	}
