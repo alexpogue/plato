@@ -1,5 +1,11 @@
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Scanner;
+import java.util.Set;
 
 public class platoUI {
 	private static IUser.UserType utype;
@@ -67,7 +73,6 @@ public class platoUI {
 				System.out.println(counter++ + ": View Media Checked Out");
 				System.out.println(counter++ + ": Exit");
 				break;
-				
 		}
 		
 		int numOptions = 0;
@@ -174,18 +179,21 @@ public class platoUI {
 			
 			//View media checked out
 			case 11:
-//				long cid = -1;
-//				while(cid == -1)
-//				{
-//					System.out.println("\nEnter Customer id: ");
-//					cid = handleID();
-//				}
-				// TODO: Implement me!
-				// libControl.getMediaCheckedOut(cid);
+				long cid = -1;
+				while(cid == -1)
+				{
+					System.out.println("\nEnter Customer id: ");
+					cid = handleID();
+				}
+				viewCheckedOutMedia(cid);
 				break;
 				
 			//Exit	
 			case 12:
+				exit = true;
+				break;
+				
+			default:
 				exit = true;
 				break;
 		}
@@ -248,6 +256,10 @@ public class platoUI {
 			case 4:
 				submenuExit = true;
 				break;
+				
+			default:
+				submenuExit = true;
+				break;
 		}
 	}
 	
@@ -304,6 +316,10 @@ public class platoUI {
 				
 			//Main menu
 			case 4:
+				submenuExit = true;
+				break;
+				
+			default:
 				submenuExit = true;
 				break;
 		}
@@ -381,6 +397,10 @@ public class platoUI {
 			case 6:
 				submenuExit = true;
 				break;
+				
+			default:
+				submenuExit = true;
+				break;
 		}
 	}
 	
@@ -428,6 +448,10 @@ public class platoUI {
 			case 5:
 				submenuExit = true;
 				break;
+				
+			default:
+				submenuExit = true;
+				break;
 		}
 	}
 	
@@ -473,6 +497,10 @@ public class platoUI {
 
 			//Main menu
 			case 5:
+				submenuExit = true;
+				break;
+				
+			default:
 				submenuExit = true;
 				break;
 		}
@@ -560,7 +588,6 @@ public class platoUI {
 			System.out.println("Operation failure.");
 	}
 	
-	@SuppressWarnings("incomplete-switch")
 	private static void viewMediaStatus() {
 		long mid;
 		ErrorContainer err = new ErrorContainer();
@@ -585,10 +612,12 @@ public class platoUI {
 			case MediaNotFound:
 				System.out.println("Media not found.");
 				break;
+			default:
+				System.out.println("Error");
+				break;
 		}
 	}
 	
-	@SuppressWarnings("incomplete-switch")
 	private static void editMediaTitle(Media.MediaType mtype) {
 		String title;
 		long mid;
@@ -613,11 +642,12 @@ public class platoUI {
 			case CD:
 				opSuccess(libControl.editCDTitle(mid, title));
 				break;
+			default:
+				break;
 		}
 		
 	}
 	
-	@SuppressWarnings("incomplete-switch")
 	private static void editMediaGenre(Media.MediaType mtype) {
 		long mid;
 		mid = -1;
@@ -637,11 +667,12 @@ public class platoUI {
 				break;
 			case CD:
 				opSuccess(libControl.editCDGenre(mid, genre));
-				break;	
+				break;
+			default:
+				break;
 		}
 	}
 	
-	@SuppressWarnings("incomplete-switch")
 	private static void deleteMedia(Media.MediaType mtype) 
 	{
 		long mid;
@@ -667,6 +698,8 @@ public class platoUI {
 					break;
 				case CD:
 					opSuccess(libControl.deleteCD(mid));
+					break;
+				default:
 					break;
 			}
 		}
@@ -725,18 +758,73 @@ public class platoUI {
 		System.out.println("Enter a search string: ");
 		String searchString = scanner.next();
 		
-		List<Book> blist = libControl.searchBooks(bookfield, searchString);
+		List<Book> blist = new ArrayList<Book>();
+		blist = libControl.searchBooks(bookfield, searchString);
 		
 		for(Book b : blist)
 		{
 			viewBook(b);
 		}
 	}
+	
+	private static void printMediaTitle(Media m, Media.MediaType type)
+	{
+		switch(type)
+		{
+			case Book:
+				Book b = (Book) m;
+				System.out.println("\n" + b.getTitle());
+				break;
+				
+			case Movie:
+				Movie mo = (Movie) m;
+				System.out.println("\n" + mo.getTitle());
+				break;
+				
+			case CD:
+				CD cd = (CD) m;
+				System.out.println("\n" + cd.getTitle());
+				break;
+				
+			default:
+				break;
+		}
+	}
+	
+	private static void viewCheckoutCard(CheckoutCard cc) 
+	{
+		//Don't really need to print a customer ID, as they should know the one they inputed to get these
+		
+		Media m = cc.getMedia();
+		Media.MediaType type = m.getType();
+		DateFormat dateformat = new SimpleDateFormat("MM/dd/yyyy");
+		
+		Date checkoutDate = cc.getCheckOutDate();
+		Date checkinDate = cc.getCheckInDate();
+		
+		printMediaTitle(m, type);
+		System.out.println(dateformat.format(checkoutDate));
+		System.out.println(dateformat.format(checkinDate));
+	}
 
 	private static void viewCustomer(long cid)
 	{
 		Customer customer = libControl.getCustomer(cid);
-		System.out.println(customer);
+		
+		System.out.println(customer.getId());
+		System.out.println(customer.getName());
+	}
+
+	private static void viewCheckedOutMedia(long cid) 
+	{
+		Customer customer = libControl.getCustomer(cid);
+		Set<CheckoutCard> checkedOut = new HashSet<CheckoutCard>();
+		checkedOut = customer.getCheckoutCards();
+		
+		for(CheckoutCard cc : checkedOut)
+		{
+			viewCheckoutCard(cc);
+		}
 	}
 
 	private static void viewBook(long bid)
@@ -747,18 +835,23 @@ public class platoUI {
 	
 	private static void viewBook(Book b)
 	{
-		System.out.println(b);
+		System.out.println(b.getTitle());
+		System.out.println(b.getAuthor());
+		System.out.println(b.getPublisher());
+		System.out.println(b.getIsbn());
 	}
 
 	private static void viewMovie(long mid)
 	{
 		Movie movie = libControl.getMovie(mid);
-		System.out.println(movie);
+		System.out.println(movie.getTitle());
+		System.out.println(movie.getGenre());
 	}
 
 	private static void viewCD(long cdid)
 	{
 		CD cd = libControl.getCD(cdid);
-		System.out.println(cd);
+		System.out.println(cd.getTitle());
+		System.out.println(cd.getGenre());
 	}
 }
