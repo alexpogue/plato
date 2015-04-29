@@ -104,7 +104,7 @@ public class Library implements ILibrary{
 			return false;
 		}
 		CheckoutCard cc = new CheckoutCard(c, m);
-		m.addCheckoutCard(cc);DatabaseSupport
+		m.addCheckoutCard(cc);
 		c.addCheckoutCard(cc);
 		if(!databaseSupport.putMedia(m)) {
 			return false;
