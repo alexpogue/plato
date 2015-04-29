@@ -571,11 +571,16 @@ public class platoUI {
 			mid = handleID();
 		}
 		
-		boolean success = libControl.isMediaCheckedOut(mid, err);
+		boolean isCheckedOut = libControl.isMediaCheckedOut(mid, err);
 		switch(err.getError())
 		{
 			case Success:
-				opSuccess(success);
+				if(isCheckedOut)
+					System.out.println("Media *is* checked out");
+				else
+					System.out.println("Media is *not* checked out");
+				System.out.println();
+				opSuccess(true);
 				break;
 			case MediaNotFound:
 				System.out.println("Media not found.");
@@ -730,26 +735,30 @@ public class platoUI {
 
 	private static void viewCustomer(long cid)
 	{
-		//TODO Implement me!
+		Customer customer = libControl.getCustomer(cid);
+		System.out.println(customer);
 	}
 
 	private static void viewBook(long bid)
 	{
-		//TODO Implement me!
+		Book book = libControl.getBook(bid);
+		viewBook(book);
 	}
 	
 	private static void viewBook(Book b)
 	{
-		//TODO Implement me!
+		System.out.println(b);
 	}
 
 	private static void viewMovie(long mid)
 	{
-		//TODO Implement me!
+		Movie movie = libControl.getMovie(mid);
+		System.out.println(movie);
 	}
 
 	private static void viewCD(long cdid)
 	{
-		//TODO Implement me!
+		CD cd = libControl.getCD(cdid);
+		System.out.println(cd);
 	}
 }

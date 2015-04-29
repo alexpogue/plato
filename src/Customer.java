@@ -1,3 +1,4 @@
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -70,11 +71,25 @@ public class Customer implements ICustomer{
 	@Override
 	public String toString() {
 		String result = "Customer [id=" + id + ", name=" + name + "]\n";
-		result += "\tWith " + checkoutCards.size() + " checkout cards:\n";
-		for(CheckoutCard card : checkoutCards) {
-			result += "\t" + card.toString();
+		Set<CheckoutCard> cardsCheckedOut = getCurrentlyCheckedOut(checkoutCards);
+		result += "  With " + cardsCheckedOut.size() + " piece(s) of media checked out:\n";
+		for(CheckoutCard card : cardsCheckedOut) {
+			result += "    " + card.getMedia().toString() + "\n";
 		}
 		return result;
 	}
 
+	private Set<CheckoutCard> getCurrentlyCheckedOut(Set<CheckoutCard> cardsIn) {
+		Set<CheckoutCard> cardsOut = new HashSet<CheckoutCard>();
+		for(CheckoutCard card : cardsIn) {
+			if(isCheckedOut(card)) {
+				cardsOut.add(card);
+			}
+		}
+		return cardsOut;
+	}
+
+	private boolean isCheckedOut(CheckoutCard card) {
+		return card.getCheckOutDate() != null && card.getCheckInDate() == null;
+	}
 }

@@ -146,4 +146,24 @@ public class LibraryController implements ILibraryController {
 		return library.editBookPublisher(mid, newPublisher);
 	}
 
+	@Override
+	public Book getBook(long bid) {
+		return library.getBook(bid);
+	}
+
+	@Override
+	public Customer getCustomer(long cid) {
+		return library.getCustomer(cid);
+	}
+
+	@Override
+	public Movie getMovie(long mid) {
+		return library.getMovie(mid);
+	}
+
+	@Override
+	public CD getCD(long cdid) {
+		return library.getCD(cdid);
+	}
+
 }

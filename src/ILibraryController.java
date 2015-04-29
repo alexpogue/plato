@@ -35,4 +35,9 @@ public interface ILibraryController {
 	boolean editCDTitle(long cid, String newValue);
 	boolean editCDGenre(long cid, String newValue);
 
+	//extras
+	Book getBook(long bid);
+	Customer getCustomer(long cid);
+	Movie getMovie(long mid);
+	CD getCD(long cdid);
 }

@@ -174,7 +174,7 @@ public class Library implements ILibrary{
 			return false;
 		}
 		CheckoutCard cc = databaseSupport.getMostRecentCheckoutCardForMedia(mid);
-		boolean b = cc.isCheckedOut();
+		boolean b = cc != null && cc.isCheckedOut();
 		err.setError(IErrorContainer.ErrorCode.Success);
 		return b;
 	}
@@ -334,5 +334,25 @@ public class Library implements ILibrary{
 		cd.setTitle(newValue);
 		return databaseSupport.putMedia(cd);
 	}
-	
+
+	@Override
+	public Book getBook(long bid) {
+		return (Book)databaseSupport.getMedia(bid);
+	}
+
+	@Override
+	public Movie getMovie(long mid) {
+		return (Movie)databaseSupport.getMedia(mid);
+	}
+
+	@Override
+	public CD getCD(long cdid) {
+		return (CD)databaseSupport.getMedia(cdid);
+	}
+
+	@Override
+	public Customer getCustomer(long cid) {
+		return databaseSupport.getCustomer(cid);
+	}
+
 }

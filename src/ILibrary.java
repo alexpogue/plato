@@ -34,4 +34,10 @@ public interface ILibrary {
 	boolean addCD(String t);
 	boolean editCDTitle(long cid, String newValue);
 	boolean editCDGenre(long cid, String newValue);
+
+	//extra stuff
+	Book getBook(long bid);
+	Movie getMovie(long mid);
+	CD getCD(long cdid);
+	Customer getCustomer(long cid);
 }

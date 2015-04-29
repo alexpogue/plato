@@ -1,6 +1,7 @@
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -297,8 +298,18 @@ public class DatabaseSupport implements IDatabaseSupport {
 
 	@Override
 	public CheckoutCard getMostRecentCheckoutCardForMedia(long mid) {
-		// TODO Auto-generated method stub
-		return null;
+		EntityManager em = entityManagerFactory.createEntityManager();
+		Media m = em.find(Media.class, mid);
+		Set<CheckoutCard> cards = m.getCheckoutCards();
+		if(cards.size() == 0)
+			return null;
+		CheckoutCard recentCard = cards.iterator().next();
+		for(CheckoutCard card : cards) {
+			if(card.getCheckOutDate().after(recentCard.getCheckOutDate()))
+				recentCard = card;
+		}
+
+		return recentCard;
 	}
 
 	@Override
