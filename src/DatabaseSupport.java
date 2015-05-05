@@ -6,7 +6,7 @@ import java.util.Set;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
-import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 
 public class DatabaseSupport implements IDatabaseSupport {
 	private static final String PERSISTENCE_UNIT_NAME = "EclipseLink-JPA-Installation";
@@ -273,7 +273,7 @@ public class DatabaseSupport implements IDatabaseSupport {
 	public User getUser(String username) {
 		// TODO: enforce one user per username.
 		EntityManager em = entityManagerFactory.createEntityManager();
-		Query q = em.createQuery("select u from User u where u.username = :username");
+		TypedQuery<User> q = em.createQuery("select u from User u where u.username = :username", User.class);
 		q.setParameter("username", username);
 		List<User> userList = q.getResultList();
 
@@ -338,7 +338,7 @@ public class DatabaseSupport implements IDatabaseSupport {
 		default:
 			return null;
 		}
-		Query q = em.createQuery("select b from Book b where b." + fieldName + "=:value");
+		TypedQuery<Book> q = em.createQuery("select b from Book b where b." + fieldName + "=:value", Book.class);
 		q.setParameter("value", searchString);
 		List<Book> results = q.getResultList();
 
