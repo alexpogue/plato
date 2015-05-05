@@ -142,6 +142,11 @@ public class LibraryController implements ILibraryController {
 	}
 
 	@Override
+	public boolean editBookIsbn(long mid, String newAuthor) {
+		return library.editBookIsbn(mid, newAuthor);
+	}
+
+	@Override
 	public boolean editBookPublisher(long mid, String newPublisher) {
 		return library.editBookPublisher(mid, newPublisher);
 	}

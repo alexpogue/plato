@@ -12,6 +12,7 @@ public interface ILibraryController {
 	boolean editBookTitle(long mid, String newTitle);
 	boolean editBookAuthor(long mid, String newAuthor);
 	boolean editBookPublisher(long mid, String newPublisher);
+	boolean editBookIsbn(long mid, String newIsbn);
 	
 	//Iteration 2
 	void viewCustomer(long mid, ICustomerDisplay cd);

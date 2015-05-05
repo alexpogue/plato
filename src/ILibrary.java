@@ -10,6 +10,7 @@ public interface ILibrary {
 	boolean checkInMedia(long mid);
 	boolean setLatePolicy(int daysUntilLate, float costPerDay);
 	boolean editBookTitle(long mid, String newTitle);
+	boolean editBookIsbn(long mid, String newIsbn);
 	boolean editBookAuthor(long mid, String newAuthor);
 	boolean editBookPublisher(long mid, String newPublisher);
 	

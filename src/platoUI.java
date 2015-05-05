@@ -333,12 +333,13 @@ public class platoUI {
 		System.out.println(counter++ + ": Edit Book Title");
 		System.out.println(counter++ + ": Edit Book Author");
 		System.out.println(counter++ + ": Edit Book Publisher");
+		System.out.println(counter++ + ": Edit Book ISBN");
 		System.out.println(counter++ + ": Main Menu");
 		
 		int selection = -1;
 		while(selection == -1)
 		{
-			selection = acknowledgeSelection(6);
+			selection = acknowledgeSelection(7);
 		}
 		
 		String title;
@@ -393,8 +394,23 @@ public class platoUI {
 				
 				break;
 				
-			//Main menu
+			//Edit book isbn
 			case 6:
+				mid = -1;
+				while(mid == -1)
+				{
+					System.out.print("\nEnter media id of Book to be edited: ");
+					mid = handleID();
+				}
+
+				System.out.println("Enter new Publisher of book: ");
+				String isbn = scanner.next();
+
+				opSuccess(libControl.editBookIsbn(mid, isbn));
+				break;
+
+			//Main menu
+			case 7:
 				submenuExit = true;
 				break;
 				

@@ -50,14 +50,21 @@ public class Library implements ILibrary{
 	public boolean editBookAuthor(long mid, String newAuthor){
 		Media m = databaseSupport.getMedia(mid);
 		Book b = (Book) m;
-		b.setTitle(newAuthor);
+		b.setAuthor(newAuthor);
+		return databaseSupport.putMedia(b);
+	}
+	@Override
+	public boolean editBookIsbn(long mid, String newIsbn) {
+		Media m = databaseSupport.getMedia(mid);
+		Book b = (Book) m;
+		b.setIsbn(newIsbn);
 		return databaseSupport.putMedia(b);
 	}
 	@Override
 	public boolean editBookPublisher(long mid, String newPublisher){
 		Media m = databaseSupport.getMedia(mid);
 		Book b = (Book) m;
-		b.setTitle(newPublisher);
+		b.setPublisher(newPublisher);
 		return databaseSupport.putMedia(b);
 	}
 
